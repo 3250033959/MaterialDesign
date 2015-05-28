@@ -1,0 +1,21 @@
+<resources>
+    <color name="colorPrimary">#029389</color>
+    <color name="colorPrimaryDark">#007C74</color>
+
+    <color name="colorSecondary">@color/material_deep_teal_200</color>
+    <color name="colorSecondaryDark">@color/material_deep_teal_500</color>
+
+    <color name="windowBackgroundColor">@android:color/white</color>
+    <color name="black_translucent">#80000000</color>
+
+    <color name="dark_green">#029389</color>
+    <color name="light_green">#2db780</color>
+
+    <color name="selected_gray">#ffdbdbdb</color>
+    <color name="light_gray">#FAFAFA</color>
+    <color name="counter_bg">#E21B45</color>
+
+    <color name="social_button_background">#EEEEEE</color>
+    <color name="social_button_label">#6D6D6D</color>
+    <color name="social_button_count">#bdbdbd</color>
+</resources>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Material Design</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_my">Details</string>
+
+    <string name="drawer_open">Menu Opened</string>
+    <string name="drawer_close">Menu closed</string>
+
+    <string name="share_label">Share</string>
+    <string name="comment_label">Comment</string>
+    <string name="like_label">Like</string>
+
+    <string name="profile">Profile - Not implemented</string>
+    <string name="floating_button">Make it to do anything you want!</string>
+</resources>
