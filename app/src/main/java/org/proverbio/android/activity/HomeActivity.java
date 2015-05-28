@@ -94,7 +94,6 @@ public class HomeActivity extends BaseActivity implements NavigationDrawerAdapte
                 break;
 
             default:
-                fragment = new ImageGridFragment();
                 break;
 
         }
