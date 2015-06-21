@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import org.proverbio.android.ApplicationContext;
 import org.proverbio.android.material.R;
 
 /**
@@ -31,6 +32,20 @@ public abstract class BaseActivity extends AppCompatActivity
             //Enables Home as Up - Arrow or Drawer icon
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    public void onResume()
+    {
+        ApplicationContext.getInstance().setCurrentActivity(this);
+        super.onResume();
+    }
+
+    @Override
+    public void onStop()
+    {
+        ApplicationContext.getInstance().setCurrentActivity(null);
+        super.onStop();
     }
 
     protected abstract int getLayoutResource();

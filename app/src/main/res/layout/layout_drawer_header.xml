@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/profileLayout"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,7 +9,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/navigationHeader"
         android:orientation="vertical"
         android:layout_marginTop="@dimen/top_header_bolder">
 
@@ -36,13 +36,15 @@
                 android:layout_height="wrap_content"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white"
+                android:text="@string/session_user_name"/>
 
             <TextView
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/white"
+                android:text="@string/session_user_email"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

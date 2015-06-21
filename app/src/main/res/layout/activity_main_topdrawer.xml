@@ -27,30 +27,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
 
-            <ImageButton
+            <android.support.design.widget.FloatingActionButton
                 android:id="@+id/floatingActionButton"
                 android:layout_gravity="bottom|end"
                 style="@style/FabEditStyle"
                 android:scaleType="fitXY"/>
         </FrameLayout>
     </LinearLayout>
-    <!-- android:layout_marginTop="?android:attr/actionBarSize"-->
-    <org.proverbio.android.view.ScrimInsetsFrameLayout
-        android:id="@+id/scrimInsetsFrameLayout"
-        android:layout_width="@dimen/navigation_drawer_width"
-        android:layout_height="wrap_content"
-        android:fitsSystemWindows="true"
-        android:layout_gravity="start"
-        app:insetForeground="#4000"
-        android:elevation="10dp"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <fragment
-            android:id="@+id/fragment_drawer"
-            android:name="org.proverbio.android.drawer.NavigationDrawerFragment"
-            android:layout_width="@dimen/navigation_drawer_width"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"/>
-    </org.proverbio.android.view.ScrimInsetsFrameLayout>
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigationView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:headerLayout="@layout/layout_drawer_header"
+        app:menu="@menu/menu_drawer"/>
 </android.support.v4.widget.DrawerLayout>

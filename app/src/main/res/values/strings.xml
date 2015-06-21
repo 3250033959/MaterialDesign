@@ -14,4 +14,12 @@
 
     <string name="profile">Profile - Not implemented</string>
     <string name="floating_button">Make it to do anything you want!</string>
+
+    <!-- Drawer Items -->
+    <string name="drawer_item_one">RecyclerView</string>
+    <string name="drawer_item_two">GridView</string>
+    <string name="drawer_item_three">Settings</string>
+    <!-- Drawer Header Info -->
+    <string name="session_user_name">Juan Pablo Proverbio</string>
+    <string name="session_user_email">juanp@cloudm.co.nz</string>
 </resources>

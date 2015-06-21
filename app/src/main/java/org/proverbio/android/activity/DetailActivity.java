@@ -58,6 +58,7 @@ public class DetailActivity extends BaseActivity
         {
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
 
