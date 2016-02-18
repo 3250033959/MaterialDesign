@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import org.proverbio.android.ApplicationContext;
+import org.proverbio.android.context.SharedPreferencesManager;
 import org.proverbio.android.fragment.GraphGridFragment;
 import org.proverbio.android.fragment.ImagesGridFragment;
 import org.proverbio.android.material.R;
@@ -91,14 +91,14 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 if (!isNavigationDrawerLearnt)
                 {
                     isNavigationDrawerLearnt = true;
-                    ApplicationContext.getInstance().setPreferenceValue(DRAWER_LEARNT, true);
+                    SharedPreferencesManager.setPreferenceValue(HomeActivity.this, DRAWER_LEARNT, true);
                 }
 
                 invalidateOptionsMenu();
             }
         };
 
-        isNavigationDrawerLearnt = (Boolean)ApplicationContext.getInstance().getPreferenceValue(DRAWER_LEARNT, Boolean.class);
+        isNavigationDrawerLearnt = (Boolean)SharedPreferencesManager.getPreferenceValue(this, DRAWER_LEARNT, Boolean.class);
 
         if (!isNavigationDrawerLearnt)
             this.drawerLayout.openDrawer(Gravity.LEFT);

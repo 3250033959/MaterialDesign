@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
-import org.proverbio.android.ApplicationContext;
+import org.proverbio.android.context.ApplicationContext;
 import org.proverbio.android.material.R;
 
 /**
