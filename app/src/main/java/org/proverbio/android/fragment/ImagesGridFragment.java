@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.proverbio.android.activity.DetailActivity;
-import org.proverbio.android.Util;
+import org.proverbio.android.util.Util;
 import org.proverbio.android.material.R;
 import org.proverbio.android.recycler.RecyclerItem;
 

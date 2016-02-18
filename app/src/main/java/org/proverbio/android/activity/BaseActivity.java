@@ -37,14 +37,14 @@ public abstract class BaseActivity extends AppCompatActivity
     @Override
     public void onResume()
     {
-        ApplicationContext.getInstance().setCurrentActivity(this);
+        ApplicationContext.getInstance().setVisibleActivity(this);
         super.onResume();
     }
 
     @Override
     public void onStop()
     {
-        ApplicationContext.getInstance().setCurrentActivity(null);
+        ApplicationContext.getInstance().setVisibleActivity(null);
         super.onStop();
     }
 

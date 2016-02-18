@@ -18,7 +18,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name="org.proverbio.android.activity.HomeActivity"
+            android:name="org.proverbio.android.activity.AppMainActivity"
             android:label="@string/app_name"
             android:configChanges="orientation|screenSize">
 
@@ -30,13 +30,13 @@
 
         <activity
             android:name="org.proverbio.android.activity.DetailActivity"
-            android:parentActivityName="org.proverbio.android.activity.HomeActivity"
+            android:parentActivityName="org.proverbio.android.activity.AppMainActivity"
             android:permission="org.proverbio.android.INTERNAL"
             android:configChanges="orientation|screenSize">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="org.proverbio.android.activity.HomeActivity"/>
+                android:value="org.proverbio.android.activity.AppMainActivity"/>
         </activity>
     </application>
 </manifest>

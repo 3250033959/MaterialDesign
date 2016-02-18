@@ -3,7 +3,9 @@ package org.proverbio.android.context;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import java.util.HashSet;
+import com.google.gson.internal.Primitives;
+
+import java.util.LinkedHashSet;
 
 /**
  * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
@@ -28,36 +30,34 @@ public class SharedPreferencesManager
      * @param returnType
      * @return
      */
-    public static Object getPreferenceValue(Context context, String key, Class<?> returnType)
+    public static <T> T getPreferenceValue(Context context, String key, Class<T> returnType)
     {
         if (String.class.getSimpleName().equals(returnType.getSimpleName()))
         {
-            return getSharedPreferences(context).getString(key, "");
+            return Primitives.wrap(returnType).cast(getSharedPreferences(context).getString(key, ""));
         }
         else if (Boolean.class.getSimpleName().equals(returnType.getSimpleName()))
         {
-            return getSharedPreferences(context).getBoolean(key, false);
+            return Primitives.wrap(returnType).cast(getSharedPreferences(context).getBoolean(key, false));
         }
         else if (Float.class.getSimpleName().equals(returnType.getSimpleName()))
         {
-            return getSharedPreferences(context).getFloat(key, 0f);
+            return Primitives.wrap(returnType).cast(getSharedPreferences(context).getFloat(key, 0f));
         }
         else if (Integer.class.getSimpleName().equals(returnType.getSimpleName()))
         {
-            return getSharedPreferences(context).getInt(key, 0);
+            return Primitives.wrap(returnType).cast(getSharedPreferences(context).getInt(key, 0));
         }
         else if (Long.class.getSimpleName().equals(returnType.getSimpleName()))
         {
-            return getSharedPreferences(context).getLong(key, 0l);
+            return Primitives.wrap(returnType).cast(getSharedPreferences(context).getLong(key, 0l));
         }
-        else if (HashSet.class.getSimpleName().equals(returnType.getSimpleName()))
+        else if (LinkedHashSet.class.getSimpleName().equals(returnType.getSimpleName()))
         {
-            return getSharedPreferences(context).getStringSet(key, new HashSet<String>());
+            return Primitives.wrap(returnType).cast(getSharedPreferences(context).getStringSet(key, new LinkedHashSet<String>()));
         }
-        else
-        {
-            return getSharedPreferences(context).getAll();
-        }
+
+        throw new IllegalArgumentException( "This type is not supported yet." );
     }
 
     /**
@@ -98,9 +98,9 @@ public class SharedPreferencesManager
         {
             getSharedPreferences(context).edit().putLong(key, (Long) value).commit();
         }
-        else if (HashSet.class.isInstance(value))
+        else if (LinkedHashSet.class.isInstance(value))
         {
-            getSharedPreferences(context).edit().putStringSet(key, (HashSet<String>) value).commit();
+            getSharedPreferences(context).edit().putStringSet(key, (LinkedHashSet<String>) value).commit();
         }
     }
 

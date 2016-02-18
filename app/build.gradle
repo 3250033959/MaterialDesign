@@ -41,6 +41,8 @@ dependencies {
 
     //Graphs library
     compile 'com.github.PhilJay:MPAndroidChart:v2.2.2'
+    //Util Libraries
+    compile 'com.google.code.gson:gson:2.3.1'
 }
 
 //Remove if you don't want sources.

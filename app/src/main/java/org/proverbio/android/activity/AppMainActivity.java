@@ -22,7 +22,7 @@ import org.proverbio.android.material.R;
 /**
  * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
  */
-public class HomeActivity extends BaseActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener
+public class AppMainActivity extends BaseActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener
 {
     /**
      * The isDrawerLearn key used to save value to prefs.
@@ -91,7 +91,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 if (!isNavigationDrawerLearnt)
                 {
                     isNavigationDrawerLearnt = true;
-                    SharedPreferencesManager.setPreferenceValue(HomeActivity.this, DRAWER_LEARNT, true);
+                    SharedPreferencesManager.setPreferenceValue(AppMainActivity.this, DRAWER_LEARNT, true);
                 }
 
                 invalidateOptionsMenu();
@@ -150,7 +150,7 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
                 break;
 
             default:
-                Log.d( HomeActivity.class.getSimpleName(), "hello id: " + item.getItemId() );
+                Log.d( AppMainActivity.class.getSimpleName(), "hello id: " + item.getItemId() );
         }
         return super.onOptionsItemSelected(item);
     }

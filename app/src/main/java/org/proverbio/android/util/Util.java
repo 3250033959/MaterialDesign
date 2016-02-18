@@ -1,4 +1,4 @@
-package org.proverbio.android;
+package org.proverbio.android.util;
 
 
 import android.support.v7.app.AppCompatActivity;

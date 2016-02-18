@@ -19,7 +19,7 @@ public class ApplicationContext extends Application
     /**
      * A weak reference to the visible activity
      */
-    private WeakReference<AppCompatActivity> currentActivity;
+    private WeakReference<AppCompatActivity> visibleActivity;
 
     /**
      * The app has been created
@@ -51,28 +51,28 @@ public class ApplicationContext extends Application
     }
 
     /**
-     * Returns the current activity instance
+     * Returns the visible activity instance
      * @return
      */
-    public AppCompatActivity getCurrentActivity()
+    public AppCompatActivity getVisibleActivity()
     {
-        return currentActivity == null ? null : currentActivity.get();
+        return visibleActivity == null ? null : visibleActivity.get();
     }
 
     /**
-     * Updates the Application references to the current activity
-     * Null if there are no current activity
-     * @param currentActivity
+     * Updates the Application references to the visible activity
+     * Null if there are no visible activity
+     * @param visibleActivity
      */
-    public void setCurrentActivity(AppCompatActivity currentActivity)
+    public void setVisibleActivity(AppCompatActivity visibleActivity)
     {
-        if (currentActivity != null)
+        if (visibleActivity != null)
         {
-            this.currentActivity = new WeakReference<>(currentActivity);
+            this.visibleActivity = new WeakReference<>(visibleActivity);
         }
         else
         {
-            this.currentActivity = null;
+            this.visibleActivity = null;
         }
     }
 }
