@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import org.proverbio.android.material.R;
 
 /**
- * @author Juan Pablo Proverbio <proverbio8@gmail.com>
+ * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
  */
 public abstract class BaseFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener
 {

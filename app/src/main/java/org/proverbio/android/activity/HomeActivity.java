@@ -15,12 +15,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import org.proverbio.android.ApplicationContext;
-import org.proverbio.android.fragment.ImageGridFragment;
-import org.proverbio.android.fragment.CardGridFragment;
+import org.proverbio.android.fragment.GraphGridFragment;
+import org.proverbio.android.fragment.ImagesGridFragment;
 import org.proverbio.android.material.R;
 
 /**
- * @author Juan Pablo Proverbio <proverbio8@gmail.com>
+ * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
  */
 public class HomeActivity extends BaseActivity implements View.OnClickListener, NavigationView.OnNavigationItemSelectedListener
 {
@@ -181,20 +181,20 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         switch (menuItem.getItemId())
         {
             case R.id.navigation_item_1:
-                fragment = getSupportFragmentManager().findFragmentByTag(CardGridFragment.TAG);
-                fragmentTag = CardGridFragment.TAG;
+                fragment = getSupportFragmentManager().findFragmentByTag(ImagesGridFragment.TAG);
+                fragmentTag = ImagesGridFragment.TAG;
                 if (fragment == null)
                 {
-                    fragment = new CardGridFragment();
+                    fragment = new ImagesGridFragment();
                 }
                 break;
 
             case R.id.navigation_item_2:
-                fragment = getSupportFragmentManager().findFragmentByTag(ImageGridFragment.TAG);
-                fragmentTag = ImageGridFragment.TAG;
+                fragment = getSupportFragmentManager().findFragmentByTag(GraphGridFragment.TAG);
+                fragmentTag = GraphGridFragment.TAG;
                 if (fragment == null)
                 {
-                    fragment = new ImageGridFragment();
+                    fragment = new GraphGridFragment();
                 }
                 break;
 

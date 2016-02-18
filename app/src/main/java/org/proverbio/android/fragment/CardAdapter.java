@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * @author Juan Pablo Proverbio <proverbio8@gmail.com>
+ * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
  */
 public class CardAdapter extends RecyclerView.Adapter<ViewHolder>
 {

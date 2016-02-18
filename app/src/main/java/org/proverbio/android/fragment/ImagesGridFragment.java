@@ -15,11 +15,11 @@ import org.proverbio.android.recycler.RecyclerItem;
 
 
 /**
- * @author Juan Pablo Proverbio <proverbio8@gmail.com>
+ * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
  */
-public class CardGridFragment extends BaseFragment implements CardAdapter.RecyclerCardCallback
+public class ImagesGridFragment extends BaseFragment implements CardAdapter.RecyclerCardCallback
 {
-    public static final String TAG = CardGridFragment.class.getSimpleName();
+    public static final String TAG = ImagesGridFragment.class.getSimpleName();
 
     private RecyclerView recyclerView;
 

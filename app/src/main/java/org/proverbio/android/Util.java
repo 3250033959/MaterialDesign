@@ -7,7 +7,7 @@ import android.view.Display;
 
 
 /**
- * @author Juan Pablo Proverbio <proverbio8@gmail.com>
+ * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
  */
 public class Util
 {

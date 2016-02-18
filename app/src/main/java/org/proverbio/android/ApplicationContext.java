@@ -9,7 +9,7 @@ import java.lang.ref.WeakReference;
 import java.util.HashSet;
 
 /**
- * @author Juan Pablo Proverbio <proverbio8@gmail.com/>
+ * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
  */
 public class ApplicationContext extends Application
 {

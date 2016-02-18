@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 
 /**
- * @author Juan Pablo Proverbio <proverbio8@gmail.com>
+ * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
  */
 public class RecyclerItem
 {

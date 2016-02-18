@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso;
 import org.proverbio.android.material.R;
 
 /**
- * @author Juan Pablo Proverbio <proverbio8@gmail.com>
+ * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
  */
 public class DetailActivity extends BaseActivity
 {
