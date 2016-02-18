@@ -40,6 +40,7 @@ public class ApplicationContext extends Application
     @Override
     public void onCreate()
     {
+        super.onCreate();
         instance = this;
 
     }
@@ -50,7 +51,8 @@ public class ApplicationContext extends Application
     @Override
     public void onTerminate()
     {
-
+        instance = null;
+        super.onTerminate();
     }
 
     /**

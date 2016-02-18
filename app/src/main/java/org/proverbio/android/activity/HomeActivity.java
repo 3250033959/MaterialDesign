@@ -7,11 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.proverbio.android.ApplicationContext;
@@ -45,11 +45,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     private NavigationView navigationView;
 
     /**
-     * The Profile Navigation Header
-     */
-    private ViewGroup navigationHeader;
-
-    /**
      * The ActionBarDrawerToggle that connects {@see android.support.v7.widget.Toolbar} and {@see DrawerLayout}
      */
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -78,8 +73,6 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
         navigationView = (NavigationView)findViewById(R.id.navigationView);
         navigationView.setNavigationItemSelectedListener(this);
-        navigationHeader = (ViewGroup)navigationView.findViewById(R.id.profileLayout);
-        navigationHeader.setOnClickListener(this);
 
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, getToolbar(), R.string.drawer_open, R.string.drawer_close)
         {
@@ -147,6 +140,18 @@ public class HomeActivity extends BaseActivity implements View.OnClickListener, 
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
+        switch (item.getItemId())
+        {
+            case R.id.navigation_item_3:
+                break;
+
+            case R.id.action_settings:
+                Toast.makeText(this, "Hello world", Toast.LENGTH_SHORT).show();
+                break;
+
+            default:
+                Log.d( HomeActivity.class.getSimpleName(), "hello id: " + item.getItemId() );
+        }
         return super.onOptionsItemSelected(item);
     }
 

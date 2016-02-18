@@ -52,7 +52,7 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
             //---- SET SPINNING COLORS
 
             //Sets the spinning view colours from color resource ids
-            swipeRefreshLayout.setColorSchemeResources( R.color.dark_green, R.color.light_green, R.color.dark_green, R.color.light_green );
+            swipeRefreshLayout.setColorSchemeResources( R.color.colorPrimary, R.color.colorPrimaryDark, R.color.colorPrimary, R.color.colorPrimaryDark );
             //It could also be: swipeRefreshLayout.setColorSchemeColors( new int[] { R.color.dark_green, R.color.light_green, R.color.dark_green, R.color.light_green } );
 
             //Sets the spinning view colours from color instances

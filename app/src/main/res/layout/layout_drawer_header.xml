@@ -3,8 +3,8 @@
     android:id="@+id/profileLayout"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/dark_green">
+    android:layout_height="180dp"
+    android:background="@drawable/ic_header_background">
 
     <LinearLayout
         android:layout_width="match_parent"
