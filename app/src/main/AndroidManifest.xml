@@ -20,7 +20,8 @@
         <activity
             android:name="org.proverbio.android.activity.AppMainActivity"
             android:label="@string/app_name"
-            android:configChanges="orientation|screenSize">
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -29,7 +30,7 @@
         </activity>
 
         <activity
-            android:name="org.proverbio.android.activity.DetailActivity"
+            android:name="org.proverbio.android.activity.ImageViewerActivity"
             android:parentActivityName="org.proverbio.android.activity.AppMainActivity"
             android:permission="org.proverbio.android.INTERNAL"
             android:configChanges="orientation|screenSize">

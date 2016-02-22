@@ -31,7 +31,8 @@
                 android:id="@+id/floatingActionButton"
                 android:layout_gravity="bottom|end"
                 style="@style/FabEditStyle"
-                android:scaleType="fitXY"/>
+                android:scaleType="fitXY"
+                android:visibility="gone"/>
         </FrameLayout>
     </LinearLayout>
 
@@ -42,5 +43,7 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/layout_drawer_header"
         app:menu="@menu/menu_drawer"
-        />
+        app:itemTextColor="@color/menu_drawer"
+        app:itemIconTint="@color/menu_drawer"
+        app:itemBackground="@drawable/nav_item"/>
 </android.support.v4.widget.DrawerLayout>

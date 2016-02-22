@@ -2,6 +2,7 @@
 package org.proverbio.android.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -15,6 +16,8 @@ public abstract class BaseActivity extends AppCompatActivity
 {
     private Toolbar toolbar;
 
+    private FloatingActionButton floatingActionButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -23,6 +26,9 @@ public abstract class BaseActivity extends AppCompatActivity
 
         //Gets {@see Toolbar} instance from inflated layout
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        //Gets {@see FloatingActionButton} instance from inflated layout
+        floatingActionButton = (FloatingActionButton)findViewById(R.id.floatingActionButton);
 
         if (toolbar != null)
         {
@@ -53,5 +59,10 @@ public abstract class BaseActivity extends AppCompatActivity
     public Toolbar getToolbar()
     {
         return toolbar;
+    }
+
+    public FloatingActionButton getFloatingActionButton()
+    {
+        return floatingActionButton;
     }
 }

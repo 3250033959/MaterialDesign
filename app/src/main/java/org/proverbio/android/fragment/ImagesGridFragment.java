@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import org.proverbio.android.activity.DetailActivity;
+import org.proverbio.android.activity.ImageViewerActivity;
 import org.proverbio.android.util.Util;
 import org.proverbio.android.material.R;
 import org.proverbio.android.recycler.RecyclerItem;
@@ -33,8 +33,8 @@ public class ImagesGridFragment extends BaseFragment implements CardAdapter.Recy
         if (recyclerView == null)
         {
             recyclerView = (RecyclerView)inflater.inflate(R.layout.fragment_recycler_card_fragment, container, false);
-            cardAdapter = new CardAdapter(getAppCompatActivity(), this);
-            GridLayoutManager layoutManager = new GridLayoutManager(getAppCompatActivity(), Util.getMaxColumnsForScreen(getAppCompatActivity(), 300));
+            cardAdapter = new CardAdapter(getContext(), this);
+            GridLayoutManager layoutManager = new GridLayoutManager(getContext(), Util.getMaxColumnsForScreen(getContext(), 300));
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(cardAdapter);
             getSwipeRefreshLayout().addView(recyclerView);
@@ -47,24 +47,24 @@ public class ImagesGridFragment extends BaseFragment implements CardAdapter.Recy
     public void onItemImageClick(int position)
     {
         RecyclerItem selectedItem = cardAdapter.getItems().get(position);
-        DetailActivity.launch(getAppCompatActivity(), selectedItem.getImageView(), selectedItem.getUrl());
+        ImageViewerActivity.launch(getContext(), selectedItem.getImageView(), selectedItem.getUrl());
     }
 
     @Override
     public void onItemLikeButtonClick(int position)
     {
-        Toast.makeText(getAppCompatActivity(), getAppCompatActivity().getString(R.string.like_label) + cardAdapter.getItems().get(position).getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getContext().getString(R.string.like_label) + cardAdapter.getItems().get(position).getName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onItemCommentButtonClick(int position)
     {
-        Toast.makeText(getAppCompatActivity(), getAppCompatActivity().getString(R.string.comment_label) + cardAdapter.getItems().get(position).getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getContext().getString(R.string.comment_label) + cardAdapter.getItems().get(position).getName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onItemShareButtonClick(int position)
     {
-        Toast.makeText(getAppCompatActivity(), getAppCompatActivity().getString(R.string.share_label) + cardAdapter.getItems().get(position).getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getContext().getString(R.string.share_label) + cardAdapter.getItems().get(position).getName(), Toast.LENGTH_SHORT).show();
     }
 }

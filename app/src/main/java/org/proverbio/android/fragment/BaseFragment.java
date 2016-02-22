@@ -1,6 +1,6 @@
 package org.proverbio.android.fragment;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.proverbio.android.activity.BaseActivity;
 import org.proverbio.android.material.R;
 
 /**
@@ -19,7 +20,7 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
     /**
      * A reference to host activity
      */
-    private AppCompatActivity appCompatActivity;
+    private BaseActivity context;
 
     /**
      * A swipe refresh layout
@@ -27,9 +28,9 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
-    public void onAttach(Activity activity)
+    public void onAttach(Context activity)
     {
-        appCompatActivity = (AppCompatActivity)activity;
+        context = (BaseActivity)activity;
         super.onAttach(activity);
     }
 
@@ -118,9 +119,9 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
         }, 2000);
     }
 
-    public AppCompatActivity getAppCompatActivity()
+    public BaseActivity getContext()
     {
-        return appCompatActivity;
+        return context;
     }
 
     public SwipeRefreshLayout getSwipeRefreshLayout()

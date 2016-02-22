@@ -7,6 +7,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,8 +20,9 @@ import org.proverbio.android.material.R;
 /**
  * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
  */
-public class DetailActivity extends BaseActivity
+public class ImageViewerActivity extends BaseActivity
 {
+    public static final String TAG = ImageViewerActivity.class.getSimpleName();
     public static final String SHARED_VIEW = "shared_view";
 
     @Override
@@ -28,6 +30,13 @@ public class DetailActivity extends BaseActivity
     {
         super.onCreate(savedInstanceState);
         ImageView image = (ImageView) findViewById(R.id.image);
+
+        if (!getIntent().hasExtra(SHARED_VIEW))
+        {
+            Log.d( TAG, "SHARED_VIEW extra is missing");
+            finish();
+        }
+
         ViewCompat.setTransitionName(image, SHARED_VIEW);
         Picasso.with(this).load(getIntent().getStringExtra(SHARED_VIEW)).into(image);
     }
@@ -43,7 +52,7 @@ public class DetailActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu)
     {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_share, menu);
         return true;
     }
 
@@ -54,7 +63,7 @@ public class DetailActivity extends BaseActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings)
+        if (id == R.id.share)
         {
             return true;
         }
@@ -71,7 +80,7 @@ public class DetailActivity extends BaseActivity
     public static void launch(AppCompatActivity activity, View transitionView, String url)
     {
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, transitionView, SHARED_VIEW);
-        Intent intent = new Intent(activity, DetailActivity.class);
+        Intent intent = new Intent(activity, ImageViewerActivity.class);
         intent.putExtra(SHARED_VIEW, url);
         ActivityCompat.startActivity(activity, intent, options.toBundle());
     }

@@ -11,5 +11,8 @@
 
     <color name="social_button_background">#EEEEEE</color>
     <color name="social_button_label">#6D6D6D</color>
+    <color name="text">#6D6D6D</color>
     <color name="social_button_count">#bdbdbd</color>
+
+    <color name="black">#000000</color>
 </resources>

@@ -4,8 +4,17 @@
         <item
             android:checked="true"
             android:id="@+id/navigation_item_1"
-            android:icon="@drawable/ic_select_all_black_48dp"
-            android:title="@string/drawer_item_one"/>
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/drawer_item_one"
+            />
+    </group>
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/navigation_item_3"
+            android:checked="true"
+            android:icon="@drawable/ic_location_white"
+            android:title="@string/drawer_item_three"/>
     </group>
 
     <group android:checkableBehavior="single">
@@ -14,13 +23,5 @@
             android:id="@+id/navigation_item_2"
             android:icon="@drawable/ic_select_all_black_48dp"
             android:title="@string/drawer_item_two"/>
-    </group>
-
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/navigation_item_3"
-            android:checked="true"
-            android:icon="@drawable/ic_select_all_black_48dp"
-            android:title="@string/drawer_item_three"/>
     </group>
 </menu>

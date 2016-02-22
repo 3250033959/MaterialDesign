@@ -3,6 +3,8 @@
 
     <string name="app_name">Showcase</string>
     <string name="action_settings">Settings</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
     <string name="title_activity_my">Details</string>
 
     <string name="drawer_open">Menu Opened</string>
@@ -16,9 +18,10 @@
     <string name="floating_button">Make it to do anything you want!</string>
 
     <!-- Drawer Items -->
-    <string name="drawer_item_one">RecyclerView</string>
-    <string name="drawer_item_two">GridView</string>
-    <string name="drawer_item_three">Settings</string>
+    <string name="drawer_item_one">Image Cards</string>
+    <string name="drawer_item_three">Geofencing</string>
+    <string name="drawer_item_two">Graphs Cards</string>
+    <string name="drawer_item_four">Settings</string>
     <!-- Drawer Header Info -->
     <string name="session_user_name">Juan Pablo Proverbio</string>
     <string name="session_user_email">proverbio@nowcreatives.co</string>
@@ -41,4 +44,6 @@
     <string name="geofence_transition_invalid_type">
         Geofence transition error: invalid transition type %1$d
     </string>
+
+    <string name="geofences_title">Geofencing</string>
 </resources>

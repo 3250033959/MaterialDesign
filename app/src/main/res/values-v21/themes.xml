@@ -12,9 +12,13 @@
 
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
-        <item name="android:windowBackground">@android:color/white</item>
+
 
         <item name="android:windowTranslucentStatus">true</item>
+
+        <item name="android:textColorPrimary">@color/text</item>
+        <item name="android:textColorSecondary">@color/colorPrimaryDark</item>
+        <item name="android:windowBackground">@color/light_gray</item>
     </style>
 
     <style name="DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">

@@ -8,7 +8,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 
-import org.proverbio.android.activity.DetailActivity;
+import org.proverbio.android.activity.ImageViewerActivity;
 import org.proverbio.android.material.R;
 
 /**
@@ -45,7 +45,7 @@ public class GraphGridFragment extends BaseFragment implements AdapterView.OnIte
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
         String url = (String) view.getTag();
-        DetailActivity.launch(getAppCompatActivity(), view.findViewById(R.id.image), url);
+        ImageViewerActivity.launch(getContext(), view.findViewById(R.id.image), url);
     }
 
     private static class GridAdapter extends BaseAdapter

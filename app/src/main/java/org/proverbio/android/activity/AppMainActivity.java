@@ -17,6 +17,7 @@ import android.widget.Toast;
 import org.proverbio.android.context.SharedPreferencesManager;
 import org.proverbio.android.fragment.GraphGridFragment;
 import org.proverbio.android.fragment.ImagesGridFragment;
+import org.proverbio.android.fragment.geofence.GeofencesRecyclerFragment;
 import org.proverbio.android.material.R;
 
 /**
@@ -131,24 +132,10 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch (item.getItemId())
         {
-            case R.id.navigation_item_3:
-                break;
-
-            case R.id.action_settings:
-                Toast.makeText(this, "Hello world", Toast.LENGTH_SHORT).show();
-                break;
-
             default:
                 Log.d( AppMainActivity.class.getSimpleName(), "hello id: " + item.getItemId() );
         }
@@ -189,6 +176,15 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
                 }
                 break;
 
+            case R.id.navigation_item_3:
+                fragment = getSupportFragmentManager().findFragmentByTag(GeofencesRecyclerFragment.TAG);
+                fragmentTag = GeofencesRecyclerFragment.TAG;
+                if (fragment == null)
+                {
+                    fragment = new GeofencesRecyclerFragment();
+                }
+                break;
+
             case R.id.navigation_item_2:
                 fragment = getSupportFragmentManager().findFragmentByTag(GraphGridFragment.TAG);
                 fragmentTag = GraphGridFragment.TAG;
@@ -196,10 +192,6 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
                 {
                     fragment = new GraphGridFragment();
                 }
-                break;
-
-            case R.id.navigation_item_3:
-                Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
                 break;
         }
 
