@@ -9,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -17,7 +16,7 @@ import android.widget.Toast;
 import org.proverbio.android.context.SharedPreferencesManager;
 import org.proverbio.android.fragment.GraphGridFragment;
 import org.proverbio.android.fragment.ImagesGridFragment;
-import org.proverbio.android.fragment.geofence.GeofencesRecyclerFragment;
+import org.proverbio.android.fragment.geofence.GeofenceMapFragment;
 import org.proverbio.android.material.R;
 
 /**
@@ -126,6 +125,31 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
     }
 
     @Override
+    public void showBackButton()
+    {
+        super.showBackButton();
+
+        if ( actionBarDrawerToggle != null && drawerLayout != null )
+        {
+            actionBarDrawerToggle.setDrawerIndicatorEnabled( false );
+            drawerLayout.setDrawerLockMode( DrawerLayout.LOCK_MODE_LOCKED_CLOSED );
+        }
+    }
+
+    @Override
+    public void showDrawerButton()
+    {
+        super.showDrawerButton();
+
+        if ( actionBarDrawerToggle != null && drawerLayout != null )
+        {
+            actionBarDrawerToggle.setDrawerIndicatorEnabled( true );
+            actionBarDrawerToggle.syncState();
+            drawerLayout.setDrawerLockMode( DrawerLayout.LOCK_MODE_UNLOCKED );
+        }
+    }
+
+    @Override
     protected int getLayoutResource()
     {
         return R.layout.activity_main_topdrawer;
@@ -152,10 +176,6 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
                 drawerLayout.closeDrawer(Gravity.LEFT);
 
                 break;
-
-            case R.id.floatingActionButton:
-                Toast.makeText(this, getString(R.string.floating_button), Toast.LENGTH_SHORT).show();
-                break;
         }
     }
 
@@ -167,7 +187,7 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
 
         switch (menuItem.getItemId())
         {
-            case R.id.navigation_item_1:
+            case R.id.image_grid:
                 fragment = getSupportFragmentManager().findFragmentByTag(ImagesGridFragment.TAG);
                 fragmentTag = ImagesGridFragment.TAG;
                 if (fragment == null)
@@ -176,16 +196,16 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
                 }
                 break;
 
-            case R.id.navigation_item_3:
-                fragment = getSupportFragmentManager().findFragmentByTag(GeofencesRecyclerFragment.TAG);
-                fragmentTag = GeofencesRecyclerFragment.TAG;
+            case R.id.geofences:
+                fragment = getSupportFragmentManager().findFragmentByTag(GeofenceMapFragment.TAG);
+                fragmentTag = GeofenceMapFragment.TAG;
                 if (fragment == null)
                 {
-                    fragment = new GeofencesRecyclerFragment();
+                    fragment = new GeofenceMapFragment();
                 }
                 break;
 
-            case R.id.navigation_item_2:
+            case R.id.graphs_grid:
                 fragment = getSupportFragmentManager().findFragmentByTag(GraphGridFragment.TAG);
                 fragmentTag = GraphGridFragment.TAG;
                 if (fragment == null)

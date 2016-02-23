@@ -8,3 +8,5 @@ Demostrates usage of:
 * GridView, CardView
 * Floating Action Button
 * Shared Preferences
+
+

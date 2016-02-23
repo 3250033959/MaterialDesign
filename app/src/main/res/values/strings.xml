@@ -17,6 +17,18 @@
     <string name="profile">Profile - Not implemented</string>
     <string name="floating_button">Make it to do anything you want!</string>
 
+    <string name="latitude_label">Latitude</string>
+    <string name="longitude_label">Longitude</string>
+    <string name="address_label">Address</string>
+    <string name="search_label">Search</string>
+    <string name="done_label">Done</string>
+    <string name="location_label">Location</string>
+    <string name="name_label">Name</string>
+    <string name="radius_label">Radius</string>
+    <!-- Button generic description -->
+    <string name="cancel_button_label">Cancel</string>
+    <string name="save_button_label">Save</string>
+    <string name="ok_button_label">Ok</string>
     <!-- Drawer Items -->
     <string name="drawer_item_one">Image Cards</string>
     <string name="drawer_item_three">Geofencing</string>
@@ -45,5 +57,15 @@
         Geofence transition error: invalid transition type %1$d
     </string>
 
-    <string name="geofences_title">Geofencing</string>
+    <string name="geofences_title">Geo-fences</string>
+    <string name="fragment_compose_geofence_title">New Geo-fence</string>
+    <string name="location_picker_title">Location Picker</string>
+
+    <string name="location_permission_declined">Location permission is disabled. Please go to Settings and enable it if you wish to use this feature</string>
+    <string name="location_permission_explanation">You need to enable Location permission in order to use this feature</string>
+    <string name="location_picker_locate">Would you like to locate youself in the map?</string>
+
+    <!-- Configurations -->
+    <string name="google_api_key">AIzaSyC67Pv_rrtYei8fuSCrR6Ct7fWP7pHYqD0</string>
+
 </resources>

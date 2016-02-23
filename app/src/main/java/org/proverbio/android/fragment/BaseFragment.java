@@ -32,6 +32,7 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
     {
         context = (BaseActivity)activity;
         super.onAttach(activity);
+        getContext().setTitle(R.string.geofences_title);
     }
 
     @Override
@@ -100,6 +101,31 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
         }
 
         return swipeRefreshLayout;
+    }
+
+    /**
+     * A Navigation fragment is a fragment used in the NavigationView
+     * @return - true if it's shown in the sliding menu
+     */
+    public boolean isNavigationFragment()
+    {
+        return false;
+    }
+
+    @Override
+    public void onResume()
+    {
+        if (isNavigationFragment())
+        {
+            getContext().showDrawerButton();
+        }
+        else
+        {
+            getContext().showBackButton();
+        }
+
+        getContext().setTitle(R.string.geofences_title);
+        super.onResume();
     }
 
     @Override

@@ -3,7 +3,7 @@
     <group android:checkableBehavior="single">
         <item
             android:checked="true"
-            android:id="@+id/navigation_item_1"
+            android:id="@+id/image_grid"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/drawer_item_one"
             />
@@ -11,7 +11,7 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/navigation_item_3"
+            android:id="@+id/geofences"
             android:checked="true"
             android:icon="@drawable/ic_location_white"
             android:title="@string/drawer_item_three"/>
@@ -20,7 +20,7 @@
     <group android:checkableBehavior="single">
         <item
             android:checked="true"
-            android:id="@+id/navigation_item_2"
+            android:id="@+id/graphs_grid"
             android:icon="@drawable/ic_select_all_black_48dp"
             android:title="@string/drawer_item_two"/>
     </group>

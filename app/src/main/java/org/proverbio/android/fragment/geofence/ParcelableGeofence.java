@@ -16,8 +16,8 @@ public class ParcelableGeofence implements SafeParcelable
     private String id;
     private String name;
     private String address;
-    private long latitude;
-    private long longitude;
+    private double latitude;
+    private double longitude;
     private float radius;
 
     public ParcelableGeofence()
@@ -25,7 +25,7 @@ public class ParcelableGeofence implements SafeParcelable
         super();
     }
 
-    public ParcelableGeofence(String id, String name, String address, long latitude, long longitude, float radius)
+    public ParcelableGeofence(String id, String name, String address, double latitude, double longitude, float radius)
     {
         this.id = id;
         this.name = name;
@@ -33,6 +33,13 @@ public class ParcelableGeofence implements SafeParcelable
         this.latitude = latitude;
         this.longitude = longitude;
         this.radius = radius;
+    }
+
+    public ParcelableGeofence(String address, double latitude, double longitude)
+    {
+        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     public ParcelableGeofence(Parcel in)
@@ -80,22 +87,22 @@ public class ParcelableGeofence implements SafeParcelable
         this.address = address;
     }
 
-    public long getLatitude()
+    public double getLatitude()
     {
         return latitude;
     }
 
-    public void setLatitude(long latitude)
+    public void setLatitude(double latitude)
     {
         this.latitude = latitude;
     }
 
-    public long getLongitude()
+    public double getLongitude()
     {
         return longitude;
     }
 
-    public void setLongitude(long longitude)
+    public void setLongitude(double longitude)
     {
         this.longitude = longitude;
     }
@@ -122,8 +129,8 @@ public class ParcelableGeofence implements SafeParcelable
         dest.writeString(id);
         dest.writeString(name);
         dest.writeString(address);
-        dest.writeLong(latitude);
-        dest.writeLong(longitude);
+        dest.writeDouble(latitude);
+        dest.writeDouble(longitude);
         dest.writeFloat(radius);
     }
 

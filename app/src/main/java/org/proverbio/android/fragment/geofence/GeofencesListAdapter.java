@@ -15,30 +15,16 @@ import java.util.List;
  * @author Juan Pablo Proverbio
  * @since 1.0
  */
-public class GeofencesRecyclerAdapter extends RecyclerView.Adapter<GeofenceViewHolder>
+public class GeofencesListAdapter extends RecyclerView.Adapter<GeofenceViewHolder>
 {
     private final Context context;
 
     private List<ParcelableGeofence> geofencesList;
 
-    public GeofencesRecyclerAdapter(Context context)
+    public GeofencesListAdapter(Context context, List<ParcelableGeofence> geofencesList)
     {
         this.context = context;
-        this.geofencesList = new ArrayList<>();
-
-        ParcelableGeofence geofence = new ParcelableGeofence();
-        geofence.setName("My Geofence");
-        geofence.setAddress("27 Union Street, Auckland City");
-        geofence.setLatitude(123);
-        geofence.setLongitude(97);
-        geofence.setRadius(200);
-        geofence.setId("geofenceId");
-
-        this.geofencesList.add(geofence);
-        this.geofencesList.add(geofence);
-        this.geofencesList.add(geofence);
-        this.geofencesList.add(geofence);
-
+        this.geofencesList = geofencesList;
     }
 
     @Override

@@ -40,6 +40,16 @@ public abstract class BaseActivity extends AppCompatActivity
         }
     }
 
+    public void showBackButton()
+    {
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void showDrawerButton()
+    {
+        getSupportActionBar().setDisplayHomeAsUpEnabled( false );
+    }
+
     @Override
     public void onResume()
     {

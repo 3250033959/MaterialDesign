@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.proverbio.android.activity.ImageViewerActivity;
-import org.proverbio.android.util.Util;
+import org.proverbio.android.util.Utils;
 import org.proverbio.android.material.R;
 import org.proverbio.android.recycler.RecyclerItem;
 
@@ -34,7 +34,7 @@ public class ImagesGridFragment extends BaseFragment implements CardAdapter.Recy
         {
             recyclerView = (RecyclerView)inflater.inflate(R.layout.fragment_recycler_card_fragment, container, false);
             cardAdapter = new CardAdapter(getContext(), this);
-            GridLayoutManager layoutManager = new GridLayoutManager(getContext(), Util.getMaxColumnsForScreen(getContext(), 300));
+            GridLayoutManager layoutManager = new GridLayoutManager(getContext(), Utils.getMaxColumnsForScreen(getContext(), 300));
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(cardAdapter);
             getSwipeRefreshLayout().addView(recyclerView);
@@ -66,5 +66,10 @@ public class ImagesGridFragment extends BaseFragment implements CardAdapter.Recy
     public void onItemShareButtonClick(int position)
     {
         Toast.makeText(getContext(), getContext().getString(R.string.share_label) + cardAdapter.getItems().get(position).getName(), Toast.LENGTH_SHORT).show();
+    }
+
+    public boolean isNavigationFragment()
+    {
+        return true;
     }
 }

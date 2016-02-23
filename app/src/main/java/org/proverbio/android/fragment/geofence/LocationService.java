@@ -5,6 +5,7 @@ import android.content.Context;
 import org.proverbio.android.context.SharedPreferencesManager;
 import org.proverbio.android.util.JsonManager;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -23,24 +24,47 @@ public class LocationService
 
     private final Context context;
 
-    private List<ParcelableGeofence> geofenceList;
+    private List<ParcelableGeofence> geofencesList;
 
     private LocationService(Context context)
     {
         this.context = context;
+
+        this.geofencesList = new ArrayList<>();
+
+        ParcelableGeofence geofence = new ParcelableGeofence();
+        geofence.setName("My Geofence");
+        geofence.setAddress("27 Union Street, Auckland City");
+        geofence.setLatitude(-36.8548985);
+        geofence.setLongitude(174.7576697);
+        geofence.setRadius(200);
+        geofence.setId("geofenceId");
+
+        this.geofencesList.add(geofence);
+        geofence.setLatitude(-36.8548985);
+        geofence.setLongitude(174.7576697);
+        this.geofencesList.add(geofence);
+        geofence.setLatitude(-36.851052);
+        geofence.setLongitude(174.749795);
+        this.geofencesList.add(geofence);
+        geofence.setLatitude(-36.863242);
+        geofence.setLongitude(174.737821);
+        this.geofencesList.add(geofence);
     }
 
-    public static LocationService getInstance(Context context)
+    public static synchronized LocationService getInstance(Context context)
     {
-        synchronized (instance)
+        if (instance == null)
         {
-            if (instance == null)
-            {
-                instance = new LocationService(context);
-            }
+            instance = new LocationService(context);
         }
 
         return instance;
+    }
+
+    public boolean saveGeofence(ParcelableGeofence geofence)
+    {
+        return true;
     }
 
     /**
@@ -53,15 +77,15 @@ public class LocationService
     {
         boolean found = false;
 
-        for ( ParcelableGeofence item : getGeofenceList() )
+        for ( ParcelableGeofence item : getGeofencesList() )
         {
             if ( item.getId() == mapItem.getId() )
             {
-                getGeofenceList().remove( item );
+                getGeofencesList().remove( item );
 
                 if ( !removeOnly )
                 {
-                    getGeofenceList().add( mapItem );
+                    getGeofencesList().add( mapItem );
                 }
 
                 found = true;
@@ -71,7 +95,7 @@ public class LocationService
 
         if ( !found && !removeOnly )
         {
-            getGeofenceList().add( mapItem );
+            getGeofencesList().add( mapItem );
         }
 
         //TODO saveMapItemsToPrefs();
@@ -106,9 +130,9 @@ public class LocationService
      */
     public ParcelableGeofence findGeofenceById(String geofenceId)
     {
-        if (!getGeofenceList().isEmpty())
+        if (!getGeofencesList().isEmpty())
         {
-            for ( ParcelableGeofence geofence : getGeofenceList() )
+            for ( ParcelableGeofence geofence : getGeofencesList() )
             {
                 if (geofence.getId().equals(geofenceId))
                 {
@@ -124,14 +148,14 @@ public class LocationService
      * Returns the available Geo-fences
      * @return
      */
-    private List<ParcelableGeofence> getGeofenceList()
+    public List<ParcelableGeofence> getGeofencesList()
     {
-        if (geofenceList == null)
+        if (geofencesList == null)
         {
-            geofenceList = readGeofencesFromPrefs();
+            geofencesList = readGeofencesFromPrefs();
         }
 
-        return geofenceList;
+        return geofencesList;
     }
 
     /**

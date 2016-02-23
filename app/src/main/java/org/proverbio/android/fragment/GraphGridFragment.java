@@ -91,4 +91,9 @@ public class GraphGridFragment extends BaseFragment implements AdapterView.OnIte
             return view;
         }
     }
+
+    public boolean isNavigationFragment()
+    {
+        return true;
+    }
 }

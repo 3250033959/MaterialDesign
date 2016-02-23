@@ -18,18 +18,18 @@ import org.proverbio.android.recycler.DividerItemDecoration;
  *
  *  A ListFragment that allows to enable/disable/add/update/remove Geo-fences
  */
-public class GeofencesRecyclerFragment extends BaseFragment implements View.OnClickListener
+public class GeofencesListFragment extends BaseFragment implements View.OnClickListener
 {
-    public static final String TAG = GeofencesRecyclerFragment.class.getSimpleName();
+    public static final String TAG = GeofencesListFragment.class.getSimpleName();
 
-    private GeofencesRecyclerAdapter geofenceRecyclerAdapter;
+    private GeofencesListAdapter geofenceRecyclerAdapter;
     private RecyclerView geofencesRecyclerView;
 
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        this.geofenceRecyclerAdapter = new GeofencesRecyclerAdapter(getContext());
+        this.geofenceRecyclerAdapter = new GeofencesListAdapter(getContext(), LocationService.getInstance(getContext()).getGeofencesList());
         getContext().getToolbar().setTitle(R.string.geofences_title);
         getContext().getFloatingActionButton().setOnClickListener(this);
     }
