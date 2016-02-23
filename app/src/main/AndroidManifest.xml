@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <permission
         android:name="org.proverbio.android.INTERNAL"
@@ -33,7 +34,8 @@
             android:name="org.proverbio.android.activity.ImageViewerActivity"
             android:parentActivityName="org.proverbio.android.activity.AppMainActivity"
             android:permission="org.proverbio.android.INTERNAL"
-            android:configChanges="orientation|screenSize">
+            android:configChanges="orientation|screenSize"
+            android:theme="@style/AppTheme">
 
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -50,6 +52,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.proverbio.android.activity.AppMainActivity"/>
         </activity>
+
+        <receiver android:name="org.proverbio.android.fragment.geofence.GeofenceRebootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
 
         <meta-data
             android:name="com.google.android.gms.version"

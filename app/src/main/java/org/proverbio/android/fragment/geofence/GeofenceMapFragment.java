@@ -1,21 +1,16 @@
 package org.proverbio.android.fragment.geofence;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -24,8 +19,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import org.proverbio.android.fragment.BaseFragment;
+import org.proverbio.android.fragment.base.BaseFragment;
 import org.proverbio.android.material.R;
+import org.proverbio.android.util.StringConstants;
 
 import java.util.List;
 
@@ -37,11 +33,10 @@ import java.util.List;
 public class GeofenceMapFragment extends BaseFragment implements
         OnMapReadyCallback,
         GoogleMap.OnMapLongClickListener,
+        GoogleMap.OnInfoWindowClickListener,
         View.OnClickListener
 {
     public static final String TAG = GeofenceMapFragment.class.getSimpleName();
-
-    public static final int REQUEST_CODE_PICK_PLACE = 149;
 
     private MapView mapView;
     private GoogleMap googleMap;
@@ -56,22 +51,47 @@ public class GeofenceMapFragment extends BaseFragment implements
         mapView = new MapView(getContext());
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
-
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        if (getSwipeRefreshLayout() == null)
+        setHasOptionsMenu(true);
+
+        if (getFragmentLayout() == null)
         {
             super.onCreateView(inflater, container, savedInstanceState);
-            getSwipeRefreshLayout().setEnabled(false);
-            getSwipeRefreshLayout().addView(mapView);
+            getFragmentLayout().setEnabled(false);
+            getFragmentLayout().addView(mapView);
             getContext().getFloatingActionButton().setOnClickListener(this);
         }
 
-        return getSwipeRefreshLayout();
+        return getFragmentLayout();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        menu.clear();
+        inflater.inflate(R.menu.menu_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case R.id.list:
+                FragmentTransaction transaction = getContext().getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+                transaction.replace(R.id.view_container, new GeofencesListFragment());
+                transaction.addToBackStack(GeofencesListFragment.TAG);
+                transaction.commit();
+                return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -80,7 +100,11 @@ public class GeofenceMapFragment extends BaseFragment implements
         switch (v.getId())
         {
             case R.id.floatingActionButton:
-                new GeofenceComposeFragment().show(getContext().getSupportFragmentManager(), GeofenceComposeFragment.class.getSimpleName());
+                FragmentTransaction transaction = getContext().getSupportFragmentManager().beginTransaction();
+                transaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+                transaction.replace(R.id.view_container, new GeofenceComposeFragment());
+                transaction.addToBackStack(GeofenceComposeFragment.TAG);
+                transaction.commit();
                 break;
         }
     }
@@ -89,38 +113,47 @@ public class GeofenceMapFragment extends BaseFragment implements
     public void onMapReady( GoogleMap googleMap )
     {
         this.googleMap = googleMap;
-        this.googleMap.getUiSettings().setZoomControlsEnabled(true);
-        this.googleMap.setOnMapLongClickListener(this);
+        this.googleMap.getUiSettings().setZoomControlsEnabled(false);
         this.googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+        this.googleMap.setOnMapLongClickListener(this);
+        this.googleMap.setOnInfoWindowClickListener(this);
 
         for (ParcelableGeofence geofence : geofencesList)
         {
             addMarkerToMap(geofence.getLatitude(), geofence.getLongitude(), geofence.getName(), geofence.getAddress(), false);
         }
 
-        if ( LocationPermissionManager.isLocationPermissionGranted(getContext()))
+        if ( !LocationPermissionManager.isLocationPermissionGranted(getContext()))
         {
-            this.googleMap.setLocationSource(new LocationSourceImpl(getContext()));
-        }
-        else
-        {
-            this.googleMap.setLocationSource(null);
-
             //Let's give some time to the view to load. It gives a better feel to the user.
-            new Handler().postDelayed( new Runnable()
-            {
+            new Handler().postDelayed(new Runnable() {
                 @Override
-                public void run()
-                {
-                    if ( isVisible() )
-                    {
-                        LocationPermissionManager.checkSelfLocationPermission( getActivity(),
+                public void run() {
+                    if (isVisible()) {
+                        LocationPermissionManager.checkSelfLocationPermission(getActivity(),
                                 LocationPermissionManager.REQUEST_LOCATION_PERMISSION,
-                                GeofenceMapFragment.this.getString(R.string.location_picker_locate) );
+                                GeofenceMapFragment.this.getString(R.string.location_picker_locate));
                     }
                 }
-            }, 2000 );
+            }, 2000);
         }
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker)
+    {
+        ParcelableGeofence parcelableGeofence = LocationService.getInstance(getContext()).findGeofenceById(marker.getId());
+
+        GeofenceComposeFragment geofenceComposeFragment = new GeofenceComposeFragment();
+        Bundle params = new Bundle();
+        params.putParcelable(StringConstants.ITEM_KEY, parcelableGeofence);
+        geofenceComposeFragment.setArguments(params);
+
+        FragmentTransaction transaction = getContext().getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+        transaction.replace(R.id.view_container, geofenceComposeFragment);
+        transaction.addToBackStack(GeofenceComposeFragment.TAG);
+        transaction.commit();
     }
 
     /**
@@ -140,7 +173,7 @@ public class GeofenceMapFragment extends BaseFragment implements
                         googleMap != null )
                 {
                     // permission was granted, yay!
-                    this.googleMap.setLocationSource(new LocationSourceImpl(getContext()));
+                   //TODO
                 }
                 else
                 {
@@ -152,28 +185,24 @@ public class GeofenceMapFragment extends BaseFragment implements
     }
 
     @Override
-    public void onActivityResult( int requestCode, int resultCode, Intent data )
-    {
-        if ( requestCode == REQUEST_CODE_PICK_PLACE )
-        {
-            if ( resultCode == Activity.RESULT_OK )
-            {
-                Place place = PlaceAutocomplete.getPlace(getContext(), data);
-                //TODO updateMarkerInMap(place.getLatLng().latitude, place.getLatLng().longitude, (String) place.getName(), (String) place.getAddress(), false);
-            }
-            else if ( resultCode == PlaceAutocomplete.RESULT_ERROR )
-            {
-                Status status = PlaceAutocomplete.getStatus(getContext(), data);
-                // TODO: Handle the error.
-                Log.e(TAG, status.getStatusMessage());
-            }
-        }
-    }
-
-    @Override
     public void onMapLongClick( LatLng latLng )
     {
-        //TODO updateMarkerInMap(latLng.latitude, latLng.longitude, "Geo fence name", getAddress(latLng), false );
+        ParcelableGeofence parcelableGeofence = new ParcelableGeofence();
+        parcelableGeofence.setAddress("Address");
+        parcelableGeofence.setLatitude(latLng.latitude);
+        parcelableGeofence.setLongitude(latLng.longitude);
+        parcelableGeofence.setRadius(100);
+
+        GeofenceComposeFragment geofenceComposeFragment = new GeofenceComposeFragment();
+        Bundle params = new Bundle();
+        params.putParcelable(StringConstants.ITEM_KEY, parcelableGeofence);
+        geofenceComposeFragment.setArguments(params);
+
+        FragmentTransaction transaction = getContext().getSupportFragmentManager().beginTransaction();
+        transaction.setCustomAnimations(R.anim.fadein, R.anim.fadeout, R.anim.fadein, R.anim.fadeout);
+        transaction.replace(R.id.view_container, geofenceComposeFragment);
+        transaction.addToBackStack(GeofenceComposeFragment.TAG);
+        transaction.commit();
     }
 
     private void addMarkerToMap( double latitude, double longitude, String title, String address, boolean noCameraMove )
@@ -237,6 +266,17 @@ public class GeofenceMapFragment extends BaseFragment implements
         }
 
         super.onDestroy();
+    }
+
+    @Override
+    public int getTitleResId()
+    {
+        return R.string.drawer_item_two;
+    }
+
+    public boolean isNavigationFragment()
+    {
+        return true;
     }
 }
 

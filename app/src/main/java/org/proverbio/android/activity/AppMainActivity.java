@@ -93,12 +93,19 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
                     isNavigationDrawerLearnt = true;
                     SharedPreferencesManager.setPreferenceValue(AppMainActivity.this, DRAWER_LEARNT, true);
                 }
-
                 invalidateOptionsMenu();
             }
         };
+        actionBarDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                onBackPressed();
+            }
+        });
 
-        isNavigationDrawerLearnt = (Boolean)SharedPreferencesManager.getPreferenceValue(this, DRAWER_LEARNT, Boolean.class);
+        isNavigationDrawerLearnt = SharedPreferencesManager.getPreferenceValue(this, DRAWER_LEARNT, Boolean.class);
 
         if (!isNavigationDrawerLearnt)
             this.drawerLayout.openDrawer(Gravity.LEFT);
@@ -153,17 +160,6 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
     protected int getLayoutResource()
     {
         return R.layout.activity_main_topdrawer;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
-        {
-            default:
-                Log.d( AppMainActivity.class.getSimpleName(), "hello id: " + item.getItemId() );
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

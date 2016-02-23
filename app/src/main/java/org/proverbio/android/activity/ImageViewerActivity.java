@@ -29,6 +29,7 @@ public class ImageViewerActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        getToolbar().setTitle("");
         ImageView image = (ImageView) findViewById(R.id.image);
 
         if (!getIntent().hasExtra(SHARED_VIEW))
@@ -46,7 +47,6 @@ public class ImageViewerActivity extends BaseActivity
     {
         return R.layout.activity_detail;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu)

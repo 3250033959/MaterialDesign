@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.proverbio.android.fragment.BaseFragment;
+import org.proverbio.android.fragment.base.BaseFragment;
 import org.proverbio.android.material.R;
 import org.proverbio.android.recycler.DividerItemDecoration;
 
@@ -30,7 +30,6 @@ public class GeofencesListFragment extends BaseFragment implements View.OnClickL
     {
         super.onCreate(savedInstanceState);
         this.geofenceRecyclerAdapter = new GeofencesListAdapter(getContext(), LocationService.getInstance(getContext()).getGeofencesList());
-        getContext().getToolbar().setTitle(R.string.geofences_title);
         getContext().getFloatingActionButton().setOnClickListener(this);
     }
 
@@ -46,10 +45,16 @@ public class GeofencesListFragment extends BaseFragment implements View.OnClickL
             geofencesRecyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
             geofencesRecyclerView.setItemAnimator(new DefaultItemAnimator());
             geofencesRecyclerView.setAdapter(geofenceRecyclerAdapter);
-            getSwipeRefreshLayout().addView(geofencesRecyclerView);
+            getFragmentLayout().addView(geofencesRecyclerView);
         }
 
-        return getSwipeRefreshLayout();
+        return getFragmentLayout();
+    }
+
+    @Override
+    public int getTitleResId()
+    {
+        return R.string.drawer_item_two;
     }
 
     @Override
@@ -67,12 +72,4 @@ public class GeofencesListFragment extends BaseFragment implements View.OnClickL
                 break;
         }
     }
-
-    @Override
-    public void onResume()
-    {
-        getContext().getToolbar().setTitle(R.string.geofences_title);
-        super.onResume();
-    }
-
 }

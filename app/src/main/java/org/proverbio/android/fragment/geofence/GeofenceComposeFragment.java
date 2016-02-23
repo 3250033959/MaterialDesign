@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatSeekBar;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,7 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import org.proverbio.android.BaseComposeFragment;
+import org.proverbio.android.fragment.base.BaseFragment;
 import org.proverbio.android.material.R;
 import org.proverbio.android.util.StringConstants;
 import org.proverbio.android.util.Validator;
@@ -20,11 +23,12 @@ import org.proverbio.android.util.Validator;
 /**
  * @author Juan Pablo Proverbio
  */
-public class GeofenceComposeFragment extends BaseComposeFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener
+public class GeofenceComposeFragment extends BaseFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener
 
 {
     public static final String TAG = GeofenceComposeFragment.class.getSimpleName();
 
+    private ViewGroup content;
     private EditText nameView;
     private TextView locationView;
     private TextView radiusLabelView;
@@ -53,27 +57,43 @@ public class GeofenceComposeFragment extends BaseComposeFragment implements View
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+        setHasOptionsMenu(true);
 
-        if (nameView == null)
+        super.onCreateView(inflater, container, savedInstanceState);
+
+        if (content == null)
         {
-            nameView = (EditText)view.findViewById(R.id.name);
-            locationView = (TextView)view.findViewById(R.id.location);
+            content = (ViewGroup)inflater.inflate(R.layout.fragment_geofence_compose, container, false);
+            nameView = (EditText)content.findViewById(R.id.name);
+            locationView = (TextView)content.findViewById(R.id.location);
             locationView.setOnClickListener(this);
-            radiusLabelView = (TextView)view.findViewById(R.id.radiusLabel);
-            radiusView = (AppCompatSeekBar)view.findViewById(R.id.radius);
+            radiusLabelView = (TextView)content.findViewById(R.id.radiusLabel);
+            radiusView = (AppCompatSeekBar)content.findViewById(R.id.radius);
             radiusView.setOnSeekBarChangeListener(this);
             radiusView.setProgress(100);
+            getFragmentLayout().addView(content);
         }
 
-        if (parcelableGeofence != null)
+        if (!TextUtils.isEmpty(parcelableGeofence.getName()))
         {
             nameView.setText(parcelableGeofence.getName());
-            locationView.setText(parcelableGeofence.getAddress());
-            radiusView.setProgress((int)parcelableGeofence.getRadius());
         }
 
-        return view;
+        if (!TextUtils.isEmpty(parcelableGeofence.getAddress()))
+        {
+            locationView.setText(parcelableGeofence.getAddress());
+        }
+
+        radiusView.setProgress(parcelableGeofence.getRadius() >= 100 ? (int)parcelableGeofence.getRadius() : 100);
+
+        return getFragmentLayout();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(final Menu menu, MenuInflater inflater)
+    {
+        menu.clear();
+        inflater.inflate(R.menu.menu_compose, menu);
     }
 
     @Override
@@ -96,7 +116,7 @@ public class GeofenceComposeFragment extends BaseComposeFragment implements View
 
                     if (LocationService.getInstance(getContext()).saveGeofence(parcelableGeofence))
                     {
-                        dismiss();
+                        getContext().onBackPressed();
                     }
                 }
                 break;
@@ -132,12 +152,6 @@ public class GeofenceComposeFragment extends BaseComposeFragment implements View
             selectedLocation = data.getParcelableExtra( StringConstants.ITEM_KEY );
             locationView.setText( selectedLocation.getAddress() );
         }
-    }
-
-    @Override
-    public int getLayoutResId()
-    {
-        return R.layout.fragment_geofence_compose;
     }
 
     @Override

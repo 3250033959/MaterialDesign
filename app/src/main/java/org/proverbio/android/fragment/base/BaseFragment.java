@@ -1,10 +1,9 @@
-package org.proverbio.android.fragment;
+package org.proverbio.android.fragment.base;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,7 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
     {
         context = (BaseActivity)activity;
         super.onAttach(activity);
-        getContext().setTitle(R.string.geofences_title);
+        getContext().setTitle(getTitleResId());
     }
 
     @Override
@@ -112,6 +111,8 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
         return false;
     }
 
+    public abstract int getTitleResId();
+
     @Override
     public void onResume()
     {
@@ -124,7 +125,7 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
             getContext().showBackButton();
         }
 
-        getContext().setTitle(R.string.geofences_title);
+        getContext().setTitle(getTitleResId());
         super.onResume();
     }
 
@@ -134,13 +135,13 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
         // In a real case you will call here the method that retrieves updates from server.
         // That method should live in your GridAdapter or any other Adapter.
 
-        getSwipeRefreshLayout().postDelayed(new Runnable()
+        getFragmentLayout().postDelayed(new Runnable()
         {
             @Override
             public void run()
             {
                 //Stop the refresh animations
-                getSwipeRefreshLayout().setRefreshing(false);
+                getFragmentLayout().setRefreshing(false);
             }
         }, 2000);
     }
@@ -150,7 +151,7 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
         return context;
     }
 
-    public SwipeRefreshLayout getSwipeRefreshLayout()
+    public SwipeRefreshLayout getFragmentLayout()
     {
         return swipeRefreshLayout;
     }

@@ -1,4 +1,4 @@
-package org.proverbio.android;
+package org.proverbio.android.fragment.base;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -21,7 +21,7 @@ import org.proverbio.android.material.R;
 /**
  * @author Juan Pablo Proverbio <proverbio@nowcreatives.co/>
  */
-public abstract class BaseComposeFragment extends AppCompatDialogFragment
+public abstract class BaseComposeDialogFragment extends AppCompatDialogFragment
 {
     private BaseActivity context;
 

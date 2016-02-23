@@ -1,8 +1,12 @@
 package org.proverbio.android.fragment.geofence;
 
 import android.content.Context;
+import android.content.res.Resources;
+
+import com.google.android.gms.location.GeofenceStatusCodes;
 
 import org.proverbio.android.context.SharedPreferencesManager;
+import org.proverbio.android.material.R;
 import org.proverbio.android.util.JsonManager;
 
 import java.util.ArrayList;
@@ -178,6 +182,25 @@ public class LocationService
         }
 
         return geofenceList;
+    }
+
+    public static String getGeofenceErrorString( Context context, int errorCode )
+    {
+        Resources resources = context.getResources();
+        switch ( errorCode )
+        {
+            case GeofenceStatusCodes.GEOFENCE_NOT_AVAILABLE:
+                return resources.getString( R.string.geofence_not_available );
+
+            case GeofenceStatusCodes.GEOFENCE_TOO_MANY_GEOFENCES:
+                return resources.getString( R.string.geofence_too_many_geofences );
+
+            case GeofenceStatusCodes.GEOFENCE_TOO_MANY_PENDING_INTENTS:
+                return resources.getString( R.string.geofence_too_many_pending_intents );
+
+            default:
+                return resources.getString( R.string.unknown_geofence_error );
+        }
     }
 
 }

@@ -13,7 +13,7 @@ import org.proverbio.android.material.R;
 import org.proverbio.android.util.DialogUtils;
 
 /**
- * @author proverbio on 23/02/16.
+ * @author Juan Pablo Proverbio
  */
 public class LocationPermissionManager
 {

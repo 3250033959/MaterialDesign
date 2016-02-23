@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.proverbio.android.activity.ImageViewerActivity;
+import org.proverbio.android.fragment.base.BaseFragment;
 import org.proverbio.android.util.Utils;
 import org.proverbio.android.material.R;
 import org.proverbio.android.recycler.RecyclerItem;
@@ -37,10 +38,16 @@ public class ImagesGridFragment extends BaseFragment implements CardAdapter.Recy
             GridLayoutManager layoutManager = new GridLayoutManager(getContext(), Utils.getMaxColumnsForScreen(getContext(), 300));
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(cardAdapter);
-            getSwipeRefreshLayout().addView(recyclerView);
+            getFragmentLayout().addView(recyclerView);
         }
 
-        return getSwipeRefreshLayout();
+        return getFragmentLayout();
+    }
+
+    @Override
+    public int getTitleResId()
+    {
+        return R.string.drawer_item_one;
     }
 
     @Override

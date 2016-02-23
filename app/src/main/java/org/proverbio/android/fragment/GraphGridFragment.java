@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 
 import org.proverbio.android.activity.ImageViewerActivity;
+import org.proverbio.android.fragment.base.BaseFragment;
 import org.proverbio.android.material.R;
 
 /**
@@ -35,10 +36,10 @@ public class GraphGridFragment extends BaseFragment implements AdapterView.OnIte
             //Sets the onItemClickListener
             gridView.setOnItemClickListener(this);
 
-            getSwipeRefreshLayout().addView(gridView);
+            getFragmentLayout().addView(gridView);
         }
 
-        return getSwipeRefreshLayout();
+        return getFragmentLayout();
     }
 
     @Override
@@ -95,5 +96,11 @@ public class GraphGridFragment extends BaseFragment implements AdapterView.OnIte
     public boolean isNavigationFragment()
     {
         return true;
+    }
+
+    @Override
+    public int getTitleResId()
+    {
+        return R.string.drawer_item_three;
     }
 }

@@ -1,9 +1,8 @@
 package org.proverbio.android.fragment.geofence;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
-
-import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
 
 import org.proverbio.android.util.JsonManager;
 
@@ -11,7 +10,7 @@ import org.proverbio.android.util.JsonManager;
  * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
  * @since 1.0
  */
-public class ParcelableGeofence implements SafeParcelable
+public class ParcelableGeofence implements Parcelable
 {
     private String id;
     private String name;

@@ -14,7 +14,7 @@
             android:id="@+id/geofences"
             android:checked="true"
             android:icon="@drawable/ic_location_white"
-            android:title="@string/drawer_item_three"/>
+            android:title="@string/drawer_item_two"/>
     </group>
 
     <group android:checkableBehavior="single">
@@ -22,6 +22,6 @@
             android:checked="true"
             android:id="@+id/graphs_grid"
             android:icon="@drawable/ic_select_all_black_48dp"
-            android:title="@string/drawer_item_two"/>
+            android:title="@string/drawer_item_three"/>
     </group>
 </menu>
