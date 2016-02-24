@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.google.gson.internal.Primitives;
 
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -53,12 +54,13 @@ public class SharedPreferencesManager
         {
             return Primitives.wrap(returnType).cast(getSharedPreferences(context).getLong(key, 0l));
         }
-        else if (Set.class.getSimpleName().equals(returnType.getSimpleName()))
-        {
-            return Primitives.wrap(returnType).cast(getSharedPreferences(context).getStringSet(key, new LinkedHashSet<String>()));
-        }
 
         throw new IllegalArgumentException( "This type is not supported yet." );
+    }
+
+    public static Set<String> getSetPreferenceValue(Context context, String key)
+    {
+        return getSharedPreferences(context).getStringSet(key, new LinkedHashSet<String>());
     }
 
     /**
@@ -99,10 +101,15 @@ public class SharedPreferencesManager
         {
             getSharedPreferences(context).edit().putLong(key, (Long) value).commit();
         }
-        else if (LinkedHashSet.class.isInstance(value))
+        else if (Set.class.isInstance(value))
         {
-            getSharedPreferences(context).edit().putStringSet(key, (LinkedHashSet<String>) value).commit();
+            getSharedPreferences(context).edit().putStringSet(key, (Set<String>) value).commit();
         }
+    }
+
+    public static void setPreferenceValue(Context context, String key, Set<String> value)
+    {
+        getSharedPreferences(context).edit().putStringSet(key, value).commit();
     }
 
     private static SharedPreferences getSharedPreferences(Context context)

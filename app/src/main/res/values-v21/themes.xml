@@ -12,8 +12,6 @@
 
         <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
 
-
-
         <item name="android:windowTranslucentStatus">true</item>
 
         <item name="android:textColorPrimary">@color/text</item>

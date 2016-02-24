@@ -4,6 +4,8 @@ import android.app.Application;
 import android.support.v7.app.AppCompatActivity;
 
 
+import org.proverbio.android.fragment.geofence.LocationServiceSingleton;
+
 import java.lang.ref.WeakReference;
 
 /**
@@ -29,6 +31,7 @@ public class ApplicationContext extends Application
     {
         super.onCreate();
         instance = this;
+        LocationServiceSingleton.getInstance(this);
     }
 
     /**

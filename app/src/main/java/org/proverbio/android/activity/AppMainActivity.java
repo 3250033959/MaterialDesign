@@ -68,7 +68,6 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        getToolbar().setTitle(R.string.app_name);
 
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
         navigationView = (NavigationView)findViewById(R.id.navigationView);
@@ -183,21 +182,21 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
 
         switch (menuItem.getItemId())
         {
-            case R.id.image_grid:
-                fragment = getSupportFragmentManager().findFragmentByTag(ImagesGridFragment.TAG);
-                fragmentTag = ImagesGridFragment.TAG;
-                if (fragment == null)
-                {
-                    fragment = new ImagesGridFragment();
-                }
-                break;
-
             case R.id.geofences:
                 fragment = getSupportFragmentManager().findFragmentByTag(GeofenceMapFragment.TAG);
                 fragmentTag = GeofenceMapFragment.TAG;
                 if (fragment == null)
                 {
                     fragment = new GeofenceMapFragment();
+                }
+                break;
+
+            case R.id.image_grid:
+                fragment = getSupportFragmentManager().findFragmentByTag(ImagesGridFragment.TAG);
+                fragmentTag = ImagesGridFragment.TAG;
+                if (fragment == null)
+                {
+                    fragment = new ImagesGridFragment();
                 }
                 break;
 

@@ -6,6 +6,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -52,6 +55,26 @@ public class GeofencesListFragment extends BaseFragment implements View.OnClickL
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+    {
+        menu.clear();
+        inflater.inflate(R.menu.menu_delete, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if (item.getItemId() == R.id.delete)
+        {
+            LocationServiceSingleton.getInstance(getContext()).removeGoefences();
+            geofenceRecyclerAdapter.setGeofencesList(LocationServiceSingleton.getInstance(getContext()).getGeofencesList());
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public int getTitleResId()
     {
         return R.string.drawer_item_two;
@@ -71,6 +94,14 @@ public class GeofencesListFragment extends BaseFragment implements View.OnClickL
                 transaction.commit();
                 break;
         }
+    }
+
+    @Override
+    public void onResume()
+    {
+        getContext().getFloatingActionButton().setVisibility(View.VISIBLE);
+        geofenceRecyclerAdapter.setGeofencesList(LocationServiceSingleton.getInstance(getContext()).getGeofencesList());
+        super.onResume();
     }
 
     @Override

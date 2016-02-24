@@ -27,6 +27,7 @@ import org.proverbio.android.fragment.base.BaseFragment;
 import org.proverbio.android.fragment.location.LocationPickerActivity;
 import org.proverbio.android.material.R;
 import org.proverbio.android.util.StringConstants;
+import org.proverbio.android.util.Utils;
 import org.proverbio.android.util.Validator;
 
 import java.util.Random;
@@ -122,15 +123,15 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
         if (selectedLocation != null)
         {
             googleMap.clear();
-            addMarkerToMap(selectedLocation.getLatitude(), selectedLocation.getLongitude(), selectedLocation.getName(), selectedLocation.getAddress(), false);
+            addMarkerToMap(selectedLocation.getLatitude(), selectedLocation.getLongitude(), selectedLocation.getAddress(), selectedLocation.getAddress(), false);
             mapView.setVisibility(View.VISIBLE);
         }
-        else if (parcelableGeofence.isValid())
+        /*else if (parcelableGeofence.isValid())
         {
             googleMap.clear();
             addMarkerToMap(selectedLocation.getLatitude(), selectedLocation.getLongitude(), selectedLocation.getName(), selectedLocation.getAddress(), false);
             mapView.setVisibility(View.VISIBLE);
-        }
+        }*/
     }
 
     @Override
@@ -148,6 +149,8 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
             case R.id.done:
                 if (Validator.hasText(nameView) & Validator.hasText(locationView))
                 {
+                    Utils.hideKeyboard(nameView, LayoutInflater.from(getContext()));
+
                     parcelableGeofence.setName(nameView.getText().toString());
                     parcelableGeofence.setRadius(radiusView.getProgress());
 
@@ -201,7 +204,8 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
         //TODO marker.setIcon( BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_original) );
         marker.showInfoWindow();
 
-        if ( !noCameraMove ) {
+        if ( !noCameraMove )
+        {
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 16));
         }
     }
@@ -215,7 +219,7 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
             selectedLocation = data.getParcelableExtra(StringConstants.ITEM_KEY);
             locationView.setText(selectedLocation.getAddress());
             googleMap.clear();
-            addMarkerToMap(selectedLocation.getLatitude(), selectedLocation.getLongitude(), selectedLocation.getName(), selectedLocation.getAddress(), false);
+            addMarkerToMap(selectedLocation.getLatitude(), selectedLocation.getLongitude(), selectedLocation.getAddress(), selectedLocation.getAddress(), false);
             mapView.setVisibility(View.VISIBLE);
         }
     }
@@ -257,6 +261,8 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
         {
             mapView.onPause();
         }
+
+        Utils.hideKeyboard(nameView, LayoutInflater.from(getContext()));
 
         super.onPause();
     }

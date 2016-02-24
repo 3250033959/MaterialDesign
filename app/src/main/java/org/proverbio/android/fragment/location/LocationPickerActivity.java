@@ -76,7 +76,6 @@ public class LocationPickerActivity extends BaseActivity implements
     public void onCreate( Bundle savedInstanceState )
     {
         super.onCreate(savedInstanceState);
-
         getToolbar().setTitle(R.string.location_picker_title);
 
         mapView = (MapView)findViewById( R.id.map );
@@ -93,7 +92,7 @@ public class LocationPickerActivity extends BaseActivity implements
        // longitudeLayout.setOnClickListener( this );
         longitudeView = ( TextView )findViewById( R.id.longitude );
 
-        geocoder = new Geocoder( this, Locale.getDefault() );
+        geocoder = new Geocoder(this, Locale.getDefault());
 
         if (getIntent() != null && getIntent().hasExtra( StringConstants.ITEM_KEY))
         {
@@ -130,7 +129,7 @@ public class LocationPickerActivity extends BaseActivity implements
                 return true;
 
             case R.id.done:
-                if (selectedLocation != null)
+                if (selectedLocation != null && selectedLocation.isValid())
                 {
                     Intent intent = new Intent();
                     intent.putExtra(StringConstants.ITEM_KEY, selectedLocation);

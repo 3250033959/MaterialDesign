@@ -89,6 +89,14 @@ public class GeofenceMapFragment extends BaseFragment implements
                 transaction.addToBackStack(GeofencesListFragment.TAG);
                 transaction.commit();
                 return true;
+
+            case R.id.delete:
+                LocationServiceSingleton.getInstance(getContext()).removeGoefences();
+                if (googleMap != null)
+                {
+                    googleMap.clear();
+                }
+                return true;
         }
 
         return false;
@@ -120,7 +128,7 @@ public class GeofenceMapFragment extends BaseFragment implements
 
         for (ParcelableGeofence geofence : geofencesList)
         {
-            addMarkerToMap(geofence.getLatitude(), geofence.getLongitude(), geofence.getName(), geofence.getAddress(), false);
+            addMarkerToMap(geofence.getLatitude(), geofence.getLongitude(), geofence.getName(), geofence.getAddress(), true);
         }
 
         if ( !LocationPermissionManager.isLocationPermissionGranted(getContext()))
@@ -231,6 +239,7 @@ public class GeofenceMapFragment extends BaseFragment implements
         }
 
         getContext().getFloatingActionButton().setVisibility(View.VISIBLE);
+        this.geofencesList = LocationServiceSingleton.getInstance(getContext()).getGeofencesList();
 
         super.onResume();
     }

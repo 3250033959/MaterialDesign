@@ -46,14 +46,14 @@ public class ParcelableGeofence implements Parcelable
         this.id = in.readString();
         this.name = in.readString();
         this.address = in.readString();
-        this.latitude = in.readLong();
-        this.longitude = in.readLong();
+        this.latitude = in.readDouble();
+        this.longitude = in.readDouble();
         this.radius = in.readFloat();
     }
 
     public boolean isValid()
     {
-        return  latitude != 0d && longitude != 0d && !TextUtils.isEmpty(id);
+        return  latitude != 0d && longitude != 0d && !TextUtils.isEmpty(address);
     }
 
     public String getId()

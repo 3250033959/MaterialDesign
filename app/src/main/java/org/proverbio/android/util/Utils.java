@@ -9,6 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.view.Display;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 
 /**
@@ -19,6 +22,12 @@ public class Utils
     private Utils()
     {
         super();
+    }
+
+    public static void hideKeyboard( View view, LayoutInflater inflater )
+    {
+        InputMethodManager in = ( InputMethodManager ) inflater.getContext().getSystemService( Context.INPUT_METHOD_SERVICE );
+        in.hideSoftInputFromWindow( view.getApplicationWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS );
     }
 
     /**

@@ -104,9 +104,16 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
      */
     public void saveGeofence(final ParcelableGeofence parcelableGeofence)
     {
-        if (parcelableGeofence == null || !parcelableGeofence.isValid() || !googleApiClient.isConnected())
+        if (parcelableGeofence == null || !parcelableGeofence.isValid())
         {
             Log.e(TAG, "This Geo-fence can't be added because is null or invalid!!");
+            return;
+        }
+
+        if (!googleApiClient.isConnected())
+        {
+            addingQueue.add(parcelableGeofence);
+            googleApiClient.connect();
             return;
         }
 
@@ -161,12 +168,20 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
                                 getGeofencePendingIntent()
                         );
 
-                pendingResult.setResultCallback(new ResultCallback<Status>() {
+                pendingResult.setResultCallback(new ResultCallback<Status>()
+                {
                     @Override
-                    public void onResult(Status status) {
-                        if (status.isSuccess()) {
+                    public void onResult(Status status)
+                    {
+                        if (status.isSuccess())
+                        {
                             getGeofencesList().add(parcelableGeofence);
                             writeToSharedPreferences();
+                            Log.d(TAG, "Added Geo-fence successfully. Id: " + parcelableGeofence.getId() + ", Address: " + parcelableGeofence.getAddress());
+                        }
+                        else
+                        {
+                            Log.e(TAG, "Couldn't add Geo-fence. Id: " + parcelableGeofence.getId() + ", Address: " + parcelableGeofence.getAddress() + ", Error: " + getGeofenceErrorString(context, status.getStatusCode()));
                         }
                     }
                 });
@@ -177,6 +192,10 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
                 // This should not ever happen
                 logSecurityException( securityException );
             }
+        }
+        else
+        {
+            Log.e(TAG, context.getString(R.string.location_permission_declined));
         }
 
     }
@@ -253,6 +272,7 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
                         {
                             getGeofencesList().clear();
                             writeToSharedPreferences();
+                            Log.d(TAG, "Removed all Geo-fences successfully");
                         }
                     }
                 });
@@ -333,7 +353,7 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
     {
         List<ParcelableGeofence> geofenceList = new CopyOnWriteArrayList<>();
 
-        Set<String> geofenceSet = SharedPreferencesManager.getPreferenceValue(context, GEO_FENCES_PREF_KEY, Set.class);
+        Set<String> geofenceSet = SharedPreferencesManager.getSetPreferenceValue(context, GEO_FENCES_PREF_KEY);
 
         if (!geofenceSet.isEmpty())
         {
@@ -349,7 +369,7 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
 
     private void writeToSharedPreferences()
     {
-        if (getGeofencesList().isEmpty())
+        if (geofencesList.isEmpty())
         {
             Log.d(TAG, "Cleared all Geo-fences from shared preferences");
             SharedPreferencesManager.removePreferenceKey(context, GEO_FENCES_PREF_KEY);
@@ -357,26 +377,26 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
         }
 
         Log.d(TAG, "Saving Geo-fences to the application's shared preference");
-        SharedPreferencesManager.setPreferenceValue(context, GEO_FENCES_PREF_KEY, mapItemsListToSet( getGeofencesList() ) );
+        SharedPreferencesManager.setPreferenceValue(context, GEO_FENCES_PREF_KEY, geofencesListToSet(getGeofencesList()));
     }
 
     /**
      * Converts the List of MapItem to a Set of String
      * @return - a Set<String> to save in the application's SharedPreferences
      */
-    private static Set<String> mapItemsListToSet( List<ParcelableGeofence> mapItems )
+    private static Set<String> geofencesListToSet(List<ParcelableGeofence> geofenceList)
     {
-        Set<String> mapItemsSet = new LinkedHashSet<>();
+        Set<String> geofencesSet = new LinkedHashSet<>();
 
-        if ( mapItems != null &&  !mapItems.isEmpty() )
+        if ( geofenceList != null &&  !geofenceList.isEmpty() )
         {
-            for ( ParcelableGeofence mapItem : mapItems )
+            for ( ParcelableGeofence fence : geofenceList )
             {
-                mapItemsSet.add( mapItem.toString() );
+                geofencesSet.add(fence.toString());
             }
         }
 
-        return mapItemsSet;
+        return geofencesSet;
     }
 
     /**
@@ -385,7 +405,7 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
      */
     public List<ParcelableGeofence> getGeofencesList()
     {
-        if (geofencesList == null)
+        if (geofencesList == null || geofencesList.isEmpty())
         {
             geofencesList = loadFromSharedPreferences();
         }
@@ -465,6 +485,11 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
     {
         Log.e(TAG, "Invalid location permission. " +
                 "You need to use ACCESS_FINE_LOCATION with geofences", securityException);
+    }
+
+    public interface Callback
+    {
+        void onSuccess();
     }
 
 }
