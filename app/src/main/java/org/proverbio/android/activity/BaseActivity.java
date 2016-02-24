@@ -40,6 +40,15 @@ public abstract class BaseActivity extends AppCompatActivity
 
             //Enables Home as Up - Arrow or Drawer icon
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+            toolbar.setNavigationOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    onBackPressed();
+                }
+            });
         }
     }
 

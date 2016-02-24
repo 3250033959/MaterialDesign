@@ -6,12 +6,16 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,8 +69,6 @@ public class LocationPickerActivity extends BaseActivity implements
     private ViewGroup longitudeLayout;
     private TextView longitudeView;
 
-    private Geocoder geocoder;
-
     private ParcelableGeofence selectedLocation;
 
     private boolean moveCameraToLocation;
@@ -74,6 +76,16 @@ public class LocationPickerActivity extends BaseActivity implements
     @Override
     public void onCreate( Bundle savedInstanceState )
     {
+        //How to set statusBar color programatically? Here we go...
+        //Only on Android Lollipop and above
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP )
+        {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor( ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        }
+
         super.onCreate(savedInstanceState);
         getToolbar().setTitle(R.string.location_picker_title);
 
@@ -90,8 +102,6 @@ public class LocationPickerActivity extends BaseActivity implements
         longitudeLayout = ( ViewGroup )findViewById( R.id.longitudeLayout );
        // longitudeLayout.setOnClickListener( this );
         longitudeView = ( TextView )findViewById( R.id.longitude );
-
-        geocoder = new Geocoder(this, Locale.getDefault());
 
         if (getIntent() != null && getIntent().hasExtra( StringConstants.ITEM_KEY))
         {
@@ -200,9 +210,9 @@ public class LocationPickerActivity extends BaseActivity implements
     {
         if ( moveCameraToLocation )
         {
-            String address = getAddress(new LatLng( location.getLatitude(), location.getLongitude()));
+            String address = LocationServiceSingleton.getInstance(this).getAddressByLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
             selectedLocation = new ParcelableGeofence(address, location.getLatitude(), location.getLongitude());
-            updateMarkerInMap(location.getLatitude(), location.getLongitude(), "You are here",
+            updateMarkerInMap(location.getLatitude(), location.getLongitude(), "You are by here",
                     address, false );
             moveCameraToLocation = false;
         }
@@ -269,15 +279,17 @@ public class LocationPickerActivity extends BaseActivity implements
     @Override
     public void onMapClick( LatLng latLng )
     {
-        selectedLocation = new ParcelableGeofence(getAddress(latLng), latLng.latitude, latLng.longitude);
-        updateMarkerInMap( latLng.latitude, latLng.longitude, "Geo fence name", getAddress( latLng ), false );
+        String address = LocationServiceSingleton.getInstance(this).getAddressByLatLng(latLng);
+        selectedLocation = new ParcelableGeofence(address, latLng.latitude, latLng.longitude);
+        updateMarkerInMap(latLng.latitude, latLng.longitude, address, address, false );
     }
 
     @Override
     public void onMapLongClick( LatLng latLng )
     {
-        selectedLocation = new ParcelableGeofence(getAddress(latLng), latLng.latitude, latLng.longitude);
-        updateMarkerInMap(latLng.latitude, latLng.longitude, "Geo fence name", getAddress(latLng), false );
+        String address = LocationServiceSingleton.getInstance(this).getAddressByLatLng(latLng);
+        selectedLocation = new ParcelableGeofence(address, latLng.latitude, latLng.longitude);
+        updateMarkerInMap(latLng.latitude, latLng.longitude, address, address, false );
     }
 
     @Override
@@ -309,32 +321,6 @@ public class LocationPickerActivity extends BaseActivity implements
         }
     }
 
-    private String getAddress( LatLng latLng )
-    {
-        try
-        {
-            List<Address> addresses = geocoder.getFromLocation( latLng.latitude, latLng.longitude, 1 );
-            if ( addresses != null && addresses.size() > 0 )
-            {
-                Address address = addresses.get( 0 );
-
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append( address.getFeatureName() ).append( " " ).append( address.getThoroughfare() ).append( "," ).
-                        append( address.getLocality() ).append( "," ).append( address.getCountryName() );
-
-                selectedLocation = new ParcelableGeofence( stringBuilder.toString(), latLng.latitude, latLng.longitude );
-
-                return  stringBuilder.toString();
-            }
-        }
-        catch ( IOException e )
-        {
-            Log.d( LocationPickerActivity.class.getSimpleName(), e.getMessage(), e);
-        }
-
-        return "";
-    }
-
     @Override
     public void onResume()
     {
@@ -342,6 +328,8 @@ public class LocationPickerActivity extends BaseActivity implements
         {
             mapView.onResume();
         }
+
+        getToolbar().setTitle(R.string.location_picker_title);
 
         super.onResume();
     }

@@ -108,9 +108,10 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
         if (!TextUtils.isEmpty(parcelableGeofence.getAddress()))
         {
             locationView.setText(parcelableGeofence.getAddress());
+            selectedLocation = parcelableGeofence;
         }
 
-        radiusView.setProgress(parcelableGeofence.getRadius() >= 100 ? (int)parcelableGeofence.getRadius() : 100);
+        radiusView.setProgress((int)parcelableGeofence.getRadius());
 
         return getSwipeRefreshLayout();
     }
@@ -127,12 +128,6 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
             addMarkerToMap(selectedLocation, false);
             mapView.setVisibility(View.VISIBLE);
         }
-        /*else if (parcelableGeofence.isValid())
-        {
-            googleMap.clear();
-            addMarkerToMap(selectedLocation.getLatitude(), selectedLocation.getLongitude(), selectedLocation.getName(), selectedLocation.getAddress(), false);
-            mapView.setVisibility(View.VISIBLE);
-        }*/
     }
 
     @Override

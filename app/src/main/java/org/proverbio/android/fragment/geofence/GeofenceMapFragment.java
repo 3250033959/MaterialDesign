@@ -243,10 +243,9 @@ public class GeofenceMapFragment extends BaseFragment implements
     {
         ParcelableGeofence parcelableGeofence = new ParcelableGeofence();
         parcelableGeofence.setName("New Geo-fence");
-        parcelableGeofence.setAddress("New Geo-fence");
+        parcelableGeofence.setAddress(LocationServiceSingleton.getInstance(getContext()).getAddressByLatLng(latLng));
         parcelableGeofence.setLatitude(latLng.latitude);
         parcelableGeofence.setLongitude(latLng.longitude);
-        parcelableGeofence.setRadius(100);
 
         GeofenceComposeFragment geofenceComposeFragment = new GeofenceComposeFragment();
         Bundle params = new Bundle();

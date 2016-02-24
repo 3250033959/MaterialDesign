@@ -71,6 +71,13 @@ public class ImageViewerActivity extends BaseActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onResume()
+    {
+        getToolbar().setTitle("");
+        super.onResume();
+    }
+
     /**
      * Launches an activity with a transition from the shared view
      * @param activity

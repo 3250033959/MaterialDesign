@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 
 import org.proverbio.android.context.SharedPreferencesManager;
 import org.proverbio.android.fragment.geofence.GeofenceTransitionsIntentService;
@@ -24,9 +26,11 @@ import org.proverbio.android.fragment.geofence.ParcelableGeofence;
 import org.proverbio.android.material.R;
 import org.proverbio.android.util.JsonManager;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -91,6 +95,8 @@ public class LocationServiceSingleton extends Observable implements GoogleApiCli
 
         //Loads Geo-fences from the SharedPreferences
         getGeofencesList();
+
+        this.geocoder = new Geocoder(context, Locale.getDefault());
     }
 
     public static synchronized LocationServiceSingleton getInstance(Context context)
@@ -526,6 +532,30 @@ public class LocationServiceSingleton extends Observable implements GoogleApiCli
         }
 
         return geofencesSet;
+    }
+
+    public String getAddressByLatLng( LatLng latLng )
+    {
+        try
+        {
+            List<Address> addresses = geocoder.getFromLocation( latLng.latitude, latLng.longitude, 1 );
+            if ( addresses != null && addresses.size() > 0 )
+            {
+                Address address = addresses.get( 0 );
+
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append( address.getFeatureName() ).append( " " ).append( address.getThoroughfare() ).append( ", " ).
+                        append( address.getLocality() ).append( ", " ).append( address.getCountryName() );
+
+                return  stringBuilder.toString();
+            }
+        }
+        catch ( IOException e )
+        {
+            Log.d( LocationPickerActivity.class.getSimpleName(), e.getMessage(), e);
+        }
+
+        return "";
     }
 
     /**
