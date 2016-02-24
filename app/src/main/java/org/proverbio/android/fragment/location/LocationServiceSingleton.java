@@ -1,4 +1,4 @@
-package org.proverbio.android.fragment.geofence;
+package org.proverbio.android.fragment.location;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -18,7 +18,8 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 
 import org.proverbio.android.context.SharedPreferencesManager;
-import org.proverbio.android.fragment.location.LocationPermissionManager;
+import org.proverbio.android.fragment.geofence.GeofenceTransitionsIntentService;
+import org.proverbio.android.fragment.geofence.ParcelableGeofence;
 import org.proverbio.android.material.R;
 import org.proverbio.android.util.JsonManager;
 
@@ -96,6 +97,14 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
         }
 
         return instance;
+    }
+
+    public void connect()
+    {
+        if (!googleApiClient.isConnected())
+        {
+            googleApiClient.connect();
+        }
     }
 
     /**
@@ -197,7 +206,106 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
         {
             Log.e(TAG, context.getString(R.string.location_permission_declined));
         }
+    }
 
+    /**
+     * Saves all Geo-fences from SharedPreferences to the device's GeofencingApi
+     */
+    public void saveGeofences()
+    {
+        if (getGeofencesList().isEmpty())
+        {
+            return;
+        }
+
+        if (!googleApiClient.isConnected())
+        {
+            addingQueue.addAll(getGeofencesList());
+            googleApiClient.connect();
+            return;
+        }
+
+        //Building Geo-fencing request with the new Geofence
+        GeofencingRequest.Builder geofencingRequestBuilder = new GeofencingRequest.Builder();
+
+        // The INITIAL_TRIGGER_ENTER flag indicates that geofencing service should trigger a
+        // GEO-FENCE_TRANSITION_ENTER notification when the geofence is added and if the device
+        // is already inside that geofence.
+        geofencingRequestBuilder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
+
+        for (ParcelableGeofence parcelableGeofence : getGeofencesList())
+        {
+            float defaultRadius = context.getResources().getInteger(R.integer.default_project_radius);
+
+            Geofence geofence = new Geofence.Builder()
+                    // Set the request ID of the geofence. This is a string to identify this
+                    // geofence.
+                    .setRequestId(parcelableGeofence.getId())
+
+                            // Set the circular region of this geofence.
+                    .setCircularRegion(
+                            parcelableGeofence.getLatitude(),
+                            parcelableGeofence.getLongitude(),
+                            parcelableGeofence.getRadius() < defaultRadius ? defaultRadius : parcelableGeofence.getRadius() )
+
+                            // Set the expiration duration of the geofence. This geofence gets automatically
+                            // removed after this period of time.
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+
+                            // Set the transition types of interest. Alerts are only generated for these
+                            // transition. We track entry and exit transitions in this sample.
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                            Geofence.GEOFENCE_TRANSITION_EXIT)
+
+                            // Create the geo-fence.
+                    .build();
+
+            // Add the geofences to be monitored by geofencing service.
+            geofencingRequestBuilder.addGeofence(geofence);
+        }
+
+        if (LocationPermissionManager.isLocationPermissionGranted(context))
+        {
+            try
+            {
+                PendingResult<Status> pendingResult =
+                        LocationServices.GeofencingApi.addGeofences(
+                                googleApiClient,
+                                // The GeofenceRequest object.
+                                geofencingRequestBuilder.build(),
+                                // A pending intent that that is reused when calling removeGeofences(). This
+                                // pending intent is used to generate an intent when a matched geofence
+                                // transition is observed.
+                                getGeofencePendingIntent()
+                        );
+
+                pendingResult.setResultCallback(new ResultCallback<Status>()
+                {
+                    @Override
+                    public void onResult(Status status)
+                    {
+                        if (status.isSuccess())
+                        {
+                            Log.d(TAG, "Added all Geo-fence successfully.");
+                        }
+                        else
+                        {
+                            Log.e(TAG, "Couldn't add all Geo-fences.");
+                        }
+                    }
+                });
+            }
+            catch ( SecurityException securityException )
+            {
+                // Catch exception generated if the app does not use ACCESS_FINE_LOCATION permission.
+                // This should not ever happen
+                logSecurityException( securityException );
+            }
+        }
+        else
+        {
+            Log.e(TAG, context.getString(R.string.location_permission_declined));
+        }
     }
 
 
@@ -355,7 +463,7 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
 
         Set<String> geofenceSet = SharedPreferencesManager.getSetPreferenceValue(context, GEO_FENCES_PREF_KEY);
 
-        if (!geofenceSet.isEmpty())
+        if (geofenceSet != null && !geofenceSet.isEmpty())
         {
             for (String item : geofenceSet)
             {

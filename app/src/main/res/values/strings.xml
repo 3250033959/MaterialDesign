@@ -24,6 +24,8 @@
     <string name="action_view_as_list">View as List</string>
     <string name="action_delete">Delete</string>
     <string name="title_activity_my">Details</string>
+    <string name="entered_geo_fence">Entered Geo-fence</string>
+    <string name="exited_geo_fence">Exited Geo-fence</string>
     <!-- Button generic description -->
     <string name="cancel_button_label">Cancel</string>
     <string name="save_button_label">Save</string>
@@ -38,9 +40,6 @@
     <!-- Drawer Header Info -->
     <string name="session_user_name">Juan Pablo Proverbio</string>
     <string name="session_user_email">proverbio@nowcreatives.co</string>
-    <string name="pref_dream_text_key">pref_dream_text</string>
-    <string name="pref_dream_text_default">zzzZZZzzz</string>
-    <string name="title_activity_main">MainActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

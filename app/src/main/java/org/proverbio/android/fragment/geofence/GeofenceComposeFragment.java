@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.proverbio.android.fragment.base.BaseFragment;
 import org.proverbio.android.fragment.location.LocationPickerActivity;
+import org.proverbio.android.fragment.location.LocationServiceSingleton;
 import org.proverbio.android.material.R;
 import org.proverbio.android.util.StringConstants;
 import org.proverbio.android.util.Utils;

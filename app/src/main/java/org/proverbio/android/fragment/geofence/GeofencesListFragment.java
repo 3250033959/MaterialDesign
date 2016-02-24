@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.proverbio.android.fragment.base.BaseFragment;
+import org.proverbio.android.fragment.location.LocationServiceSingleton;
 import org.proverbio.android.material.R;
 import org.proverbio.android.recycler.DividerItemDecoration;
 
@@ -99,9 +100,9 @@ public class GeofencesListFragment extends BaseFragment implements View.OnClickL
     @Override
     public void onResume()
     {
+        super.onResume();
         getContext().getFloatingActionButton().setVisibility(View.VISIBLE);
         geofenceRecyclerAdapter.setGeofencesList(LocationServiceSingleton.getInstance(getContext()).getGeofencesList());
-        super.onResume();
     }
 
     @Override

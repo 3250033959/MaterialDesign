@@ -32,7 +32,6 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
         context = (BaseActivity)activity;
         super.onAttach(activity);
         getContext().setTitle(getTitleResId());
-        getContext().getFloatingActionButton().setVisibility(View.GONE);
     }
 
     @Override
@@ -127,6 +126,7 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
         }
 
         getContext().setTitle(getTitleResId());
+        getContext().getFloatingActionButton().setVisibility(View.GONE);
         super.onResume();
     }
 

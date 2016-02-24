@@ -29,7 +29,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.proverbio.android.activity.BaseActivity;
-import org.proverbio.android.fragment.geofence.LocationSourceImpl;
 import org.proverbio.android.fragment.geofence.ParcelableGeofence;
 import org.proverbio.android.material.R;
 import org.proverbio.android.util.StringConstants;

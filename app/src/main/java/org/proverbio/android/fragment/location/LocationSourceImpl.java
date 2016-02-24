@@ -1,4 +1,4 @@
-package org.proverbio.android.fragment.geofence;
+package org.proverbio.android.fragment.location;
 
 import android.content.Context;
 import android.location.Location;

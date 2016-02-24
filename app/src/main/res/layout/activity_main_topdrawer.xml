@@ -33,8 +33,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 style="@style/FabEditStyle"
-                android:scaleType="fitXY"
-                android:visibility="gone"/>
+                android:scaleType="fitXY"/>
         </FrameLayout>
     </LinearLayout>
 

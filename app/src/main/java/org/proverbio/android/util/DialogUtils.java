@@ -46,4 +46,23 @@ public class DialogUtils
                 .create()
                 .show();
     }
+
+    public static void showOkDialog(Activity activity, int titleResId, String message)
+    {
+        if ( activity == null )
+        {
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder( activity );
+        builder.setTitle(titleResId);
+        builder.setMessage(message);
+        builder.setPositiveButton(R.string.ok_button_label, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.create().show();
+    }
 }

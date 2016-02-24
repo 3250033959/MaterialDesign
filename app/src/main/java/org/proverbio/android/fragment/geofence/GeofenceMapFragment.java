@@ -15,12 +15,15 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.proverbio.android.fragment.base.BaseFragment;
 import org.proverbio.android.fragment.location.LocationPermissionManager;
+import org.proverbio.android.fragment.location.LocationServiceSingleton;
 import org.proverbio.android.material.R;
 import org.proverbio.android.util.StringConstants;
 
@@ -123,13 +126,11 @@ public class GeofenceMapFragment extends BaseFragment implements
         this.googleMap = googleMap;
         this.googleMap.getUiSettings().setZoomControlsEnabled(false);
         this.googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+        this.googleMap.getUiSettings().setMapToolbarEnabled(false);
         this.googleMap.setOnMapLongClickListener(this);
         this.googleMap.setOnInfoWindowClickListener(this);
 
-        for (ParcelableGeofence geofence : geofencesList)
-        {
-            addMarkerToMap(geofence.getLatitude(), geofence.getLongitude(), geofence.getName(), geofence.getAddress(), true);
-        }
+        renderGeofencesOnMap();
 
         if ( !LocationPermissionManager.isLocationPermissionGranted(getContext()))
         {
@@ -144,6 +145,38 @@ public class GeofenceMapFragment extends BaseFragment implements
                     }
                 }
             }, 2000);
+        }
+    }
+
+    private void renderGeofencesOnMap()
+    {
+        if (googleMap == null)
+        {
+            return;
+        }
+
+        googleMap.clear();
+
+        geofencesList = LocationServiceSingleton.getInstance(getContext()).getGeofencesList();
+
+        if (!geofencesList.isEmpty())
+        {
+            final LatLngBounds.Builder boundsBuilder = LatLngBounds.builder();
+            for (ParcelableGeofence geofence : geofencesList)
+            {
+                boundsBuilder.include(new LatLng(geofence.getLatitude(), geofence.getLongitude()));
+                addMarkerToMap(geofence, true);
+            }
+
+            new Handler().postDelayed(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 30));
+                }
+            }, 300);
+
         }
     }
 
@@ -213,35 +246,42 @@ public class GeofenceMapFragment extends BaseFragment implements
         transaction.commit();
     }
 
-    private void addMarkerToMap( double latitude, double longitude, String title, String address, boolean noCameraMove )
+    private void addMarkerToMap(ParcelableGeofence geofence, boolean noCameraMove)
     {
-        LatLng position = new LatLng( latitude, longitude );
-        Marker marker = googleMap.addMarker( new MarkerOptions()
-                .position( position )
-                .title( title )
-                .snippet( address )
-                .draggable( true ) );
+        LatLng position = new LatLng(geofence.getLatitude(), geofence.getLongitude());
+        Marker marker = googleMap.addMarker(new MarkerOptions()
+                .position(position)
+                .title(geofence.getName())
+                .snippet(geofence.getAddress())
+                .draggable(true));
         //TODO marker.setIcon( BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_original) );
         marker.showInfoWindow();
 
-        if ( !noCameraMove )
+        CircleOptions projectCircle = new CircleOptions()
+                .center(position)
+                .radius(geofence.getRadius())
+                .strokeColor( getResources().getColor(R.color.colorPrimaryDark))
+                .fillColor(getResources().getColor(R.color.colorPrimaryTransparent));
+        googleMap.addCircle(projectCircle);
+
+        if (!noCameraMove)
         {
-            googleMap.animateCamera( CameraUpdateFactory.newLatLngZoom(position, 17) );
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(position, 17));
         }
     }
 
     @Override
     public void onResume()
     {
+        super.onResume();
+
         if ( mapView != null )
         {
             mapView.onResume();
         }
 
         getContext().getFloatingActionButton().setVisibility(View.VISIBLE);
-        this.geofencesList = LocationServiceSingleton.getInstance(getContext()).getGeofencesList();
-
-        super.onResume();
+        renderGeofencesOnMap();
     }
 
     @Override

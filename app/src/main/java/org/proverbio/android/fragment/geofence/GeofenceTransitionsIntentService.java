@@ -13,6 +13,7 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
 
 import org.proverbio.android.context.ApplicationContext;
+import org.proverbio.android.fragment.location.LocationServiceSingleton;
 import org.proverbio.android.material.R;
 import org.proverbio.android.util.StringConstants;
 
@@ -33,7 +34,7 @@ public class GeofenceTransitionsIntentService extends IntentService
     public GeofenceTransitionsIntentService()
     {
         // Use the TAG to name the worker thread.
-        super( TAG );
+        super(TAG);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class GeofenceTransitionsIntentService extends IntentService
 
             for ( Geofence geofence : triggeringGeofences )
             {
-                ParcelableGeofence mapItem = LocationServiceSingleton.getInstance(this).findGeofenceById(geofence.getRequestId());
+                ParcelableGeofence parcelableGeofence = LocationServiceSingleton.getInstance(this).findGeofenceById(geofence.getRequestId());
 
                 if ( geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER )
                 {
@@ -82,37 +83,29 @@ public class GeofenceTransitionsIntentService extends IntentService
                         Intent intentUpdate = new Intent();
                         intentUpdate.setAction( GEO_FENCE_TRANSITION_ACTION );
                         intentUpdate.addCategory( Intent.CATEGORY_DEFAULT );
-                        intentUpdate.putExtra( StringConstants.ITEM_KEY, mapItem );
+                        intentUpdate.putExtra( StringConstants.ITEM_KEY, parcelableGeofence );
                         intentUpdate.putExtra( GEO_FENCE_TRANSITION_KEY, geofenceTransition );
                         sendBroadcast( intentUpdate );
                     }
                     else
                     {
-                        /*sendNotification(
-                                mapItem,
-                                geofenceTransition,
-                                getBaseContext().getString( R.string.location_update ),
-                                getBaseContext().getString( R.string.entered_site_geofence ).replace( "{}", mapItem.getTitle() ) );*/
+                        sendNotification(getBaseContext().getString(R.string.entered_geo_fence), parcelableGeofence, geofenceTransition);
                     }
                 }
-                else if ( geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT )
+                else if (geofenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT)
                 {
-                    if ( ApplicationContext.getInstance().getVisibleActivity() != null )
+                    if (ApplicationContext.getInstance().getVisibleActivity() != null)
                     {
                         Intent intentUpdate = new Intent();
                         intentUpdate.setAction( GEO_FENCE_TRANSITION_ACTION );
                         intentUpdate.addCategory( Intent.CATEGORY_DEFAULT );
-                        intentUpdate.putExtra( StringConstants.ITEM_KEY, mapItem );
+                        intentUpdate.putExtra( StringConstants.ITEM_KEY, parcelableGeofence );
                         intentUpdate.putExtra( GEO_FENCE_TRANSITION_KEY, geofenceTransition );
                         sendBroadcast( intentUpdate );
                     }
                     else
                     {
-                        /*sendNotification(
-                                mapItem,
-                                geofenceTransition,
-                                getBaseContext().getString( R.string.location_update ),
-                                getBaseContext().getString( R.string.exited_site_geofence ).replace( "{}", mapItem.getTitle() ) );*/
+                        sendNotification(getBaseContext().getString(R.string.exited_geo_fence), parcelableGeofence, geofenceTransition);
                     }
                 }
             }
@@ -128,7 +121,7 @@ public class GeofenceTransitionsIntentService extends IntentService
      * Posts a notification in the notification bar when a transition is detected.
      * If the user clicks the notification, control goes to the MainActivity.
      */
-    private void sendNotification( ParcelableGeofence parcelableGeofence, int geofenceTransition )
+    private void sendNotification( String title, ParcelableGeofence parcelableGeofence, int geofenceTransition )
     {
         Intent intent = new Intent();
         intent.setAction( Intent.ACTION_MAIN );
@@ -145,8 +138,8 @@ public class GeofenceTransitionsIntentService extends IntentService
         builder.setSmallIcon( R.drawable.ic_action_chat )
                 // In a real app, you may want to use a library like Volley
                 // to decode the Bitmap.
-                .setContentTitle( "Hello" )
-                .setContentText( "lsdkgjsldkgjsldk lskdjgsldkg" )
+                .setContentTitle( title )
+                .setContentText( parcelableGeofence.getAddress() )
                 .setSound( RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) )
                 .setContentIntent( contentIntent )
                 .setAutoCancel( true );

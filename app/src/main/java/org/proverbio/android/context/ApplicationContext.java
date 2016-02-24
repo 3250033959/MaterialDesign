@@ -4,7 +4,7 @@ import android.app.Application;
 import android.support.v7.app.AppCompatActivity;
 
 
-import org.proverbio.android.fragment.geofence.LocationServiceSingleton;
+import org.proverbio.android.fragment.location.LocationServiceSingleton;
 
 import java.lang.ref.WeakReference;
 
