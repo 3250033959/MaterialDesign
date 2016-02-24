@@ -24,6 +24,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import org.proverbio.android.fragment.base.BaseFragment;
 import org.proverbio.android.fragment.location.LocationPermissionManager;
 import org.proverbio.android.fragment.location.LocationServiceSingleton;
+import org.proverbio.android.fragment.location.LocationSourceImpl;
 import org.proverbio.android.material.R;
 import org.proverbio.android.util.StringConstants;
 
@@ -132,7 +133,7 @@ public class GeofenceMapFragment extends BaseFragment implements
 
         renderGeofencesOnMap();
 
-        if ( !LocationPermissionManager.isLocationPermissionGranted(getContext()))
+        if (!LocationPermissionManager.isLocationPermissionGranted(getContext()))
         {
             //Let's give some time to the view to load. It gives a better feel to the user.
             new Handler().postDelayed(new Runnable() {
@@ -145,6 +146,11 @@ public class GeofenceMapFragment extends BaseFragment implements
                     }
                 }
             }, 2000);
+        }
+        else
+        {
+            this.googleMap.setLocationSource(new LocationSourceImpl(getContext()));
+            this.googleMap.setMyLocationEnabled(true);
         }
     }
 
@@ -214,10 +220,13 @@ public class GeofenceMapFragment extends BaseFragment implements
                         googleMap != null )
                 {
                     // permission was granted, yay!
-                   //TODO
+                    this.googleMap.setLocationSource(new LocationSourceImpl(getContext()));
+                    this.googleMap.setMyLocationEnabled(true);
                 }
                 else
                 {
+                    this.googleMap.setLocationSource(null);
+                    this.googleMap.setMyLocationEnabled(false);
                     Toast.makeText( getContext(), getString( R.string.location_permission_declined ),
                             Toast.LENGTH_SHORT ).show();
                 }
