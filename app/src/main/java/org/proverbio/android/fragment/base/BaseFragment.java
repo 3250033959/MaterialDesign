@@ -11,10 +11,13 @@ import android.view.ViewGroup;
 import org.proverbio.android.activity.BaseActivity;
 import org.proverbio.android.material.R;
 
+import java.util.Observable;
+import java.util.Observer;
+
 /**
  * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
  */
-public abstract class BaseFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener
+public abstract class BaseFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, Observer
 {
     /**
      * A reference to host activity
@@ -136,15 +139,19 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
         // In a real case you will call here the method that retrieves updates from server.
         // That method should live in your GridAdapter or any other Adapter.
 
-        getSwipeRefreshLayout().postDelayed(new Runnable()
-        {
+        getSwipeRefreshLayout().postDelayed(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 //Stop the refresh animations
                 getSwipeRefreshLayout().setRefreshing(false);
             }
         }, 2000);
+    }
+
+    @Override
+    public void update(Observable observable, Object data)
+    {
+
     }
 
     public BaseActivity getContext()

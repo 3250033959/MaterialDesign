@@ -41,6 +41,14 @@ public class ParcelableGeofence implements Parcelable
         this.longitude = longitude;
     }
 
+    public ParcelableGeofence(String address, String name, double latitude, double longitude)
+    {
+        this.address = address;
+        this.name = name;
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
     public ParcelableGeofence(Parcel in)
     {
         this.id = in.readString();
@@ -73,6 +81,11 @@ public class ParcelableGeofence implements Parcelable
 
     public String getName()
     {
+        if (TextUtils.isEmpty(address))
+        {
+            name = "New Geo-fence";
+        }
+
         return name;
     }
 
@@ -113,6 +126,11 @@ public class ParcelableGeofence implements Parcelable
 
     public float getRadius()
     {
+        if (radius < 100)
+        {
+            radius = 100;
+        }
+
         return radius;
     }
 

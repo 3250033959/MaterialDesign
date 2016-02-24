@@ -19,6 +19,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -118,13 +119,12 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
     public void onMapReady(GoogleMap googleMap)
     {
         this.googleMap = googleMap;
-        this.googleMap.getUiSettings().setAllGesturesEnabled(false);
         this.googleMap.getUiSettings().setMyLocationButtonEnabled(false);
 
         if (selectedLocation != null)
         {
             googleMap.clear();
-            addMarkerToMap(selectedLocation.getLatitude(), selectedLocation.getLongitude(), selectedLocation.getAddress(), selectedLocation.getAddress(), false);
+            addMarkerToMap(selectedLocation, false);
             mapView.setVisibility(View.VISIBLE);
         }
         /*else if (parcelableGeofence.isValid())
@@ -194,16 +194,23 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
         }
     }
 
-    private void addMarkerToMap( double latitude, double longitude, String title, String address, boolean noCameraMove )
+    private void addMarkerToMap(ParcelableGeofence parcelableGeofence, boolean noCameraMove )
     {
-        LatLng position = new LatLng( latitude, longitude );
+        LatLng position = new LatLng(parcelableGeofence.getLatitude(), parcelableGeofence.getLongitude());
         Marker marker = googleMap.addMarker( new MarkerOptions()
-                .position( position )
-                .title( title )
-                .snippet( address )
+                .position(position )
+                .title(parcelableGeofence.getName() )
+                .snippet( parcelableGeofence.getAddress() )
                 .draggable( true ) );
         //TODO marker.setIcon( BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_original) );
         marker.showInfoWindow();
+
+        CircleOptions projectCircle = new CircleOptions()
+                .center(position)
+                .radius(parcelableGeofence.getRadius())
+                .strokeColor(getResources().getColor(R.color.colorPrimaryDark))
+                .fillColor(getResources().getColor(R.color.colorPrimaryTransparent));
+        googleMap.addCircle(projectCircle);
 
         if ( !noCameraMove )
         {
@@ -220,7 +227,7 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
             selectedLocation = data.getParcelableExtra(StringConstants.ITEM_KEY);
             locationView.setText(selectedLocation.getAddress());
             googleMap.clear();
-            addMarkerToMap(selectedLocation.getLatitude(), selectedLocation.getLongitude(), selectedLocation.getAddress(), selectedLocation.getAddress(), false);
+            addMarkerToMap(selectedLocation, false);
             mapView.setVisibility(View.VISIBLE);
         }
     }
@@ -235,7 +242,21 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
     {
-        radiusLabelView.setText( progress + " metres" );
+        if (progress >= 100)
+        {
+            radiusLabelView.setText( progress + " metres" );
+
+            if (googleMap != null && selectedLocation != null)
+            {
+                googleMap.clear();
+                selectedLocation.setRadius(progress);
+                addMarkerToMap(selectedLocation, true);
+            }
+        }
+        else
+        {
+            radiusView.setProgress(100);
+        }
     }
 
     @Override

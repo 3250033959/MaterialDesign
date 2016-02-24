@@ -15,7 +15,8 @@ public class GeofenceViewHolder extends RecyclerView.ViewHolder
     private final ImageView iconView;
     private final TextView nameView;
     private final TextView addressView;
-    private final TextView latitudeLongitudeView;
+    private final TextView latitudeView;
+    private final TextView longitudeView;
     private final TextView radiusView;
 
     public GeofenceViewHolder(View itemView)
@@ -24,7 +25,8 @@ public class GeofenceViewHolder extends RecyclerView.ViewHolder
         iconView = (ImageView)itemView.findViewById(R.id.icon);
         nameView = (TextView)itemView.findViewById(R.id.title);
         addressView = (TextView)itemView.findViewById(R.id.address);
-        latitudeLongitudeView = (TextView)itemView.findViewById(R.id.latitudeLongitude);
+        latitudeView = (TextView)itemView.findViewById(R.id.latitude);
+        longitudeView = (TextView)itemView.findViewById(R.id.longitude);
         radiusView = (TextView)itemView.findViewById(R.id.radius);
     }
 
@@ -43,9 +45,14 @@ public class GeofenceViewHolder extends RecyclerView.ViewHolder
         return addressView;
     }
 
-    public TextView getLatitudeLongitudeView()
+    public TextView getLatitudeView()
     {
-        return latitudeLongitudeView;
+        return latitudeView;
+    }
+
+    public TextView getLongitudeView()
+    {
+        return longitudeView;
     }
 
     public TextView getRadiusView()

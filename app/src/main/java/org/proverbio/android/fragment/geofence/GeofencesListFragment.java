@@ -17,6 +17,9 @@ import org.proverbio.android.fragment.location.LocationServiceSingleton;
 import org.proverbio.android.material.R;
 import org.proverbio.android.recycler.DividerItemDecoration;
 
+import java.util.List;
+import java.util.Observable;
+
 /**
  * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
  *
@@ -35,6 +38,7 @@ public class GeofencesListFragment extends BaseFragment implements View.OnClickL
         super.onCreate(savedInstanceState);
         this.geofenceRecyclerAdapter = new GeofencesListAdapter(getContext(), LocationServiceSingleton.getInstance(getContext()).getGeofencesList());
         getContext().getFloatingActionButton().setOnClickListener(this);
+        LocationServiceSingleton.getInstance(getContext()).addObserver(this);
     }
 
     @Override
@@ -98,11 +102,21 @@ public class GeofencesListFragment extends BaseFragment implements View.OnClickL
     }
 
     @Override
+    public void update(Observable observable, Object data)
+    {
+        if (observable instanceof LocationServiceSingleton &&
+                data instanceof List)
+        {
+            List<ParcelableGeofence> geofenceList = (List<ParcelableGeofence>)data;
+            geofenceRecyclerAdapter.setGeofencesList(geofenceList);
+        }
+    }
+
+    @Override
     public void onResume()
     {
         super.onResume();
         getContext().getFloatingActionButton().setVisibility(View.VISIBLE);
-        geofenceRecyclerAdapter.setGeofencesList(LocationServiceSingleton.getInstance(getContext()).getGeofencesList());
     }
 
     @Override
@@ -110,5 +124,12 @@ public class GeofencesListFragment extends BaseFragment implements View.OnClickL
     {
         geofenceRecyclerAdapter.setGeofencesList(LocationServiceSingleton.getInstance(getContext()).getGeofencesList());
         getSwipeRefreshLayout().setRefreshing(false);
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        LocationServiceSingleton.getInstance(getContext()).deleteObserver(this);
+        super.onDestroy();
     }
 }

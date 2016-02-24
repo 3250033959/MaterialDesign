@@ -10,14 +10,14 @@
     <string name="profile">Profile - Not implemented</string>
     <string name="floating_button">Make it to do anything you want!</string>
 
-    <string name="latitude_label">Latitude</string>
-    <string name="longitude_label">Longitude</string>
+    <string name="latitude_label">Latitude &#160;</string>
+    <string name="longitude_label">Longitude &#160;</string>
     <string name="address_label">Address</string>
     <string name="search_label">Search</string>
     <string name="done_label">Done</string>
     <string name="location_label">Location</string>
     <string name="name_label">Name</string>
-    <string name="radius_label">Radius</string>
+    <string name="radius_label">Radius &#160;</string>
     <string name="action_settings">Settings</string>
     <string name="action_edit">Edit</string>
     <string name="action_delete_all_geofences">Clear Geo-fences</string>

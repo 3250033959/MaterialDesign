@@ -29,6 +29,7 @@ import org.proverbio.android.material.R;
 import org.proverbio.android.util.StringConstants;
 
 import java.util.List;
+import java.util.Observable;
 
 /**
  * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
@@ -40,6 +41,7 @@ public class GeofenceMapFragment extends BaseFragment implements
         GoogleMap.OnMapLongClickListener,
         GoogleMap.OnInfoWindowClickListener,
         View.OnClickListener
+
 {
     public static final String TAG = GeofenceMapFragment.class.getSimpleName();
 
@@ -52,9 +54,13 @@ public class GeofenceMapFragment extends BaseFragment implements
     public void onCreate(Bundle savedInstanceState)
     {
         geofencesList = LocationServiceSingleton.getInstance(getContext()).getGeofencesList();
+
         mapView = new MapView(getContext());
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+
+        LocationServiceSingleton.getInstance(getContext()).addObserver(this);
+
         super.onCreate(savedInstanceState);
     }
 
@@ -174,11 +180,9 @@ public class GeofenceMapFragment extends BaseFragment implements
                 addMarkerToMap(geofence, true);
             }
 
-            new Handler().postDelayed(new Runnable()
-            {
+            new Handler().postDelayed(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 30));
                 }
             }, 300);
@@ -238,7 +242,8 @@ public class GeofenceMapFragment extends BaseFragment implements
     public void onMapLongClick( LatLng latLng )
     {
         ParcelableGeofence parcelableGeofence = new ParcelableGeofence();
-        parcelableGeofence.setAddress("Address");
+        parcelableGeofence.setName("New Geo-fence");
+        parcelableGeofence.setAddress("New Geo-fence");
         parcelableGeofence.setLatitude(latLng.latitude);
         parcelableGeofence.setLongitude(latLng.longitude);
         parcelableGeofence.setRadius(100);
@@ -280,6 +285,18 @@ public class GeofenceMapFragment extends BaseFragment implements
     }
 
     @Override
+    public void update(Observable observable, Object data)
+    {
+        if (observable instanceof LocationServiceSingleton &&
+                data instanceof List )
+        {
+            List<ParcelableGeofence> geofenceList = (List<ParcelableGeofence>)data;
+            this.geofencesList = geofenceList;
+            renderGeofencesOnMap();
+        }
+    }
+
+    @Override
     public void onResume()
     {
         super.onResume();
@@ -290,7 +307,6 @@ public class GeofenceMapFragment extends BaseFragment implements
         }
 
         getContext().getFloatingActionButton().setVisibility(View.VISIBLE);
-        renderGeofencesOnMap();
     }
 
     @Override
@@ -322,6 +338,8 @@ public class GeofenceMapFragment extends BaseFragment implements
         {
             mapView.onDestroy();
         }
+
+        LocationServiceSingleton.getInstance(getContext()).deleteObserver(this);
 
         super.onDestroy();
     }

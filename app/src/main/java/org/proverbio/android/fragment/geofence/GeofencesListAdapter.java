@@ -40,8 +40,9 @@ public class GeofencesListAdapter extends RecyclerView.Adapter<GeofenceViewHolde
         ParcelableGeofence selectedItem = geofencesList.get(position);
         viewHolder.getNameView().setText(selectedItem.getName());
         viewHolder.getAddressView().setText(selectedItem.getAddress());
-        viewHolder.getLatitudeLongitudeView().setText("Lat: " + selectedItem.getLatitude() + ", Lng: " + selectedItem.getLongitude());
-        viewHolder.getRadiusView().setText("Radius: " + selectedItem.getRadius());
+        viewHolder.getLatitudeView().setText(String.valueOf(selectedItem.getLatitude()));
+        viewHolder.getLongitudeView().setText(String.valueOf(selectedItem.getLongitude()));
+        viewHolder.getRadiusView().setText(String.valueOf(selectedItem.getRadius()));
     }
 
     @Override

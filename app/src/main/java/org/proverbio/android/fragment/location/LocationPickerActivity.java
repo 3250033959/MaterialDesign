@@ -247,7 +247,7 @@ public class LocationPickerActivity extends BaseActivity implements
             {
                 moveCameraToLocation = false;
                 Place place = PlaceAutocomplete.getPlace(this, data);
-                selectedLocation = new ParcelableGeofence((String) place.getAddress(), place.getLatLng().latitude, place.getLatLng().longitude);
+                selectedLocation = new ParcelableGeofence((String) place.getAddress(), (String)place.getName(), place.getLatLng().latitude, place.getLatLng().longitude);
                 updateMarkerInMap(place.getLatLng().latitude, place.getLatLng().longitude, ( String ) place.getName(), ( String ) place.getAddress(), false);
             }
             else if ( resultCode == PlaceAutocomplete.RESULT_ERROR )

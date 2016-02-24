@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -26,6 +27,7 @@ import org.proverbio.android.util.JsonManager;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Observable;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -34,7 +36,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * An IntentService that adds/updates/removes Geo-fences to the device
  */
-public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallbacks,
+public class LocationServiceSingleton extends Observable implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener
 {
     private static final String TAG = LocationServiceSingleton.class.getSimpleName();
@@ -48,10 +50,10 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
     private static volatile LocationServiceSingleton instance;
 
     //The app Context
-    private final Context context;
+    private Context context;
 
     //Our Google API Client
-    private final GoogleApiClient googleApiClient;
+    private GoogleApiClient googleApiClient;
 
     //It's not final to be initialized lazily getGeofencesList();
     private List<ParcelableGeofence> geofencesList;
@@ -64,6 +66,8 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
 
     //Removing Queue - in the case the client is not connected then will be queued to be removed
     private List<ParcelableGeofence> removingQueue;
+
+    private Geocoder geocoder;
 
     private LocationServiceSingleton(Context context)
     {
@@ -187,6 +191,11 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
                             getGeofencesList().add(parcelableGeofence);
                             writeToSharedPreferences();
                             Log.d(TAG, "Added Geo-fence successfully. Id: " + parcelableGeofence.getId() + ", Address: " + parcelableGeofence.getAddress());
+
+
+                            setChanged();
+                            notifyObservers(getGeofencesList());
+                            Log.d(TAG, "Notified Observers");
                         }
                         else
                         {
@@ -287,6 +296,9 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
                         if (status.isSuccess())
                         {
                             Log.d(TAG, "Added all Geo-fence successfully.");
+                            setChanged();
+                            notifyObservers(getGeofencesList());
+                            Log.d(TAG, "Notified Observers");
                         }
                         else
                         {
@@ -343,8 +355,13 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
                     {
                         if (status.isSuccess())
                         {
+                            Log.d(TAG, "Removed Geo-fence successfully. Id: " + parcelableGeofence.getId() );
                             getGeofencesList().remove(parcelableGeofence);
                             writeToSharedPreferences();
+
+                            setChanged();
+                            notifyObservers(getGeofencesList());
+                            Log.d(TAG, "Notified Observers");
                         }
                     }
                 });
@@ -381,6 +398,10 @@ public class LocationServiceSingleton implements GoogleApiClient.ConnectionCallb
                             getGeofencesList().clear();
                             writeToSharedPreferences();
                             Log.d(TAG, "Removed all Geo-fences successfully");
+
+                            setChanged();
+                            notifyObservers(getGeofencesList());
+                            Log.d(TAG, "Notified Observers");
                         }
                     }
                 });
