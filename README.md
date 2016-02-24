@@ -12,6 +12,7 @@ Demostrates usage of:
 Contains a Geo-fencing Implemention
 * LocationServiceSingleton
 * LocationPermissionManager
+* GeofenceRebootReceiver
 * GeofenceTransitionsIntentService
 * GeofenceTransitionsReceiver
 * GeofenceMapFragment
