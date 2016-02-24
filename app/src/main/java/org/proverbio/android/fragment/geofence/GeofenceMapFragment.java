@@ -20,6 +20,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.proverbio.android.fragment.base.BaseFragment;
+import org.proverbio.android.fragment.location.LocationPermissionManager;
 import org.proverbio.android.material.R;
 import org.proverbio.android.util.StringConstants;
 
@@ -46,8 +47,7 @@ public class GeofenceMapFragment extends BaseFragment implements
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        geofencesList = LocationService.getInstance(getContext()).getGeofencesList();
-
+        geofencesList = LocationServiceSingleton.getInstance(getContext()).getGeofencesList();
         mapView = new MapView(getContext());
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -59,15 +59,15 @@ public class GeofenceMapFragment extends BaseFragment implements
     {
         setHasOptionsMenu(true);
 
-        if (getFragmentLayout() == null)
+        if (getSwipeRefreshLayout() == null)
         {
             super.onCreateView(inflater, container, savedInstanceState);
-            getFragmentLayout().setEnabled(false);
-            getFragmentLayout().addView(mapView);
+            getSwipeRefreshLayout().setEnabled(false);
+            getSwipeRefreshLayout().addView(mapView);
             getContext().getFloatingActionButton().setOnClickListener(this);
         }
 
-        return getFragmentLayout();
+        return getSwipeRefreshLayout();
     }
 
     @Override
@@ -142,7 +142,7 @@ public class GeofenceMapFragment extends BaseFragment implements
     @Override
     public void onInfoWindowClick(Marker marker)
     {
-        ParcelableGeofence parcelableGeofence = LocationService.getInstance(getContext()).findGeofenceById(marker.getId());
+        ParcelableGeofence parcelableGeofence = LocationServiceSingleton.getInstance(getContext()).findGeofenceById(marker.getId());
 
         GeofenceComposeFragment geofenceComposeFragment = new GeofenceComposeFragment();
         Bundle params = new Bundle();

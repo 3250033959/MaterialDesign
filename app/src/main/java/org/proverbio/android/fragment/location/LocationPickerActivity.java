@@ -1,4 +1,4 @@
-package org.proverbio.android.fragment.geofence;
+package org.proverbio.android.fragment.location;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,7 +8,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +29,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.proverbio.android.activity.BaseActivity;
+import org.proverbio.android.fragment.geofence.LocationSourceImpl;
+import org.proverbio.android.fragment.geofence.ParcelableGeofence;
 import org.proverbio.android.material.R;
 import org.proverbio.android.util.StringConstants;
 
@@ -38,8 +39,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * @author Juan Pablo Proverbio
- * @since 1.9.4
+ * @author Juan Pablo Proverbio <proverbio@nowcreatives.co/>
  */
 public class LocationPickerActivity extends BaseActivity implements
         OnMapReadyCallback,
@@ -95,9 +95,9 @@ public class LocationPickerActivity extends BaseActivity implements
 
         geocoder = new Geocoder( this, Locale.getDefault() );
 
-        if ( getIntent() != null && getIntent().hasExtra( StringConstants.ITEM_KEY ) )
+        if (getIntent() != null && getIntent().hasExtra( StringConstants.ITEM_KEY))
         {
-            selectedLocation = getIntent().getParcelableExtra( StringConstants.ITEM_KEY );
+            selectedLocation = getIntent().getParcelableExtra(StringConstants.ITEM_KEY);
         }
     }
 
@@ -118,7 +118,7 @@ public class LocationPickerActivity extends BaseActivity implements
                 try
                 {
                     Intent intent = new PlaceAutocomplete.IntentBuilder( PlaceAutocomplete.MODE_OVERLAY ).build( LocationPickerActivity.this );
-                    startActivityForResult( intent, REQUEST_CODE_PICK_PLACE );
+                    startActivityForResult(intent, REQUEST_CODE_PICK_PLACE);
                 }
                 catch ( GooglePlayServicesRepairableException e )
                 {
@@ -130,21 +130,10 @@ public class LocationPickerActivity extends BaseActivity implements
                 return true;
 
             case R.id.done:
-                if ( selectedLocation == null )
+                if (selectedLocation != null)
                 {
-                    selectedLocation = new ParcelableGeofence();
-                }
-
-                if ( !TextUtils.isEmpty( addressView.getText() ) &&
-                        !TextUtils.isEmpty( latitudeView.getText() ) &&
-                        !TextUtils.isEmpty( longitudeView.getText() ) )
-                {
-                    selectedLocation.setAddress( addressView.getText().toString() );
-                    selectedLocation.setLatitude( Double.parseDouble( latitudeView.getText().toString() ) );
-                    selectedLocation.setLongitude( Double.parseDouble( longitudeView.getText().toString() ) );
-
                     Intent intent = new Intent();
-                    intent.putExtra( StringConstants.ITEM_KEY, selectedLocation );
+                    intent.putExtra(StringConstants.ITEM_KEY, selectedLocation);
                     setResult( Activity.RESULT_OK, intent );
                     finish();
                 }
@@ -213,8 +202,10 @@ public class LocationPickerActivity extends BaseActivity implements
     {
         if ( moveCameraToLocation )
         {
-            updateMarkerInMap( location.getLatitude(), location.getLongitude(), "You are here",
-                    getAddress( new LatLng( location.getLatitude(), location.getLongitude() ) ), false );
+            String address = getAddress(new LatLng( location.getLatitude(), location.getLongitude()));
+            selectedLocation = new ParcelableGeofence(address, location.getLatitude(), location.getLongitude());
+            updateMarkerInMap(location.getLatitude(), location.getLongitude(), "You are here",
+                    address, false );
             moveCameraToLocation = false;
         }
     }
@@ -258,7 +249,8 @@ public class LocationPickerActivity extends BaseActivity implements
             {
                 moveCameraToLocation = false;
                 Place place = PlaceAutocomplete.getPlace(this, data);
-                updateMarkerInMap( place.getLatLng().latitude, place.getLatLng().longitude, ( String ) place.getName(), ( String ) place.getAddress(), false );
+                selectedLocation = new ParcelableGeofence((String) place.getAddress(), place.getLatLng().latitude, place.getLatLng().longitude);
+                updateMarkerInMap(place.getLatLng().latitude, place.getLatLng().longitude, ( String ) place.getName(), ( String ) place.getAddress(), false);
             }
             else if ( resultCode == PlaceAutocomplete.RESULT_ERROR )
             {
@@ -279,12 +271,14 @@ public class LocationPickerActivity extends BaseActivity implements
     @Override
     public void onMapClick( LatLng latLng )
     {
+        selectedLocation = new ParcelableGeofence(getAddress(latLng), latLng.latitude, latLng.longitude);
         updateMarkerInMap( latLng.latitude, latLng.longitude, "Geo fence name", getAddress( latLng ), false );
     }
 
     @Override
     public void onMapLongClick( LatLng latLng )
     {
+        selectedLocation = new ParcelableGeofence(getAddress(latLng), latLng.latitude, latLng.longitude);
         updateMarkerInMap(latLng.latitude, latLng.longitude, "Geo fence name", getAddress(latLng), false );
     }
 
@@ -313,7 +307,7 @@ public class LocationPickerActivity extends BaseActivity implements
 
         if ( !noCameraMove )
         {
-            googleMap.animateCamera( CameraUpdateFactory.newLatLngZoom(position, 17) );
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 17));
         }
     }
 

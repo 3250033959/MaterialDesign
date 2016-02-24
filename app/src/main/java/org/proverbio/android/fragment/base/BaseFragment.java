@@ -32,6 +32,7 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
         context = (BaseActivity)activity;
         super.onAttach(activity);
         getContext().setTitle(getTitleResId());
+        getContext().getFloatingActionButton().setVisibility(View.GONE);
     }
 
     @Override
@@ -135,13 +136,13 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
         // In a real case you will call here the method that retrieves updates from server.
         // That method should live in your GridAdapter or any other Adapter.
 
-        getFragmentLayout().postDelayed(new Runnable()
+        getSwipeRefreshLayout().postDelayed(new Runnable()
         {
             @Override
             public void run()
             {
                 //Stop the refresh animations
-                getFragmentLayout().setRefreshing(false);
+                getSwipeRefreshLayout().setRefreshing(false);
             }
         }, 2000);
     }
@@ -151,7 +152,7 @@ public abstract class BaseFragment extends Fragment implements SwipeRefreshLayou
         return context;
     }
 
-    public SwipeRefreshLayout getFragmentLayout()
+    public SwipeRefreshLayout getSwipeRefreshLayout()
     {
         return swipeRefreshLayout;
     }

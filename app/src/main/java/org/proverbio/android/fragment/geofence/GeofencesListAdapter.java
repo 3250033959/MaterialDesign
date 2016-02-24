@@ -50,8 +50,6 @@ public class GeofencesListAdapter extends RecyclerView.Adapter<GeofenceViewHolde
         return getGeofencesList().size();
     }
 
-
-
     private List<ParcelableGeofence> getGeofencesList()
     {
         if (geofencesList == null)
@@ -60,6 +58,17 @@ public class GeofencesListAdapter extends RecyclerView.Adapter<GeofenceViewHolde
         }
 
         return geofencesList;
+    }
+
+    public void setGeofencesList(List<ParcelableGeofence> geofencesList)
+    {
+        if (geofencesList == null || geofencesList.isEmpty())
+        {
+            getGeofencesList().clear();
+        }
+
+        this.geofencesList = geofencesList;
+        notifyDataSetChanged();
     }
 
 }

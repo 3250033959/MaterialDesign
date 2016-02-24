@@ -56,7 +56,7 @@ public class GeofenceTransitionsIntentService extends IntentService
 
         if ( geofencingEvent.hasError() )
         {
-            String errorMessage = LocationService.getGeofenceErrorString( this, geofencingEvent.getErrorCode() );
+            String errorMessage = LocationServiceSingleton.getGeofenceErrorString(this, geofencingEvent.getErrorCode());
             Log.e( TAG, errorMessage );
             return;
         }
@@ -73,7 +73,7 @@ public class GeofenceTransitionsIntentService extends IntentService
 
             for ( Geofence geofence : triggeringGeofences )
             {
-                ParcelableGeofence mapItem = LocationService.getInstance(this).findGeofenceById(geofence.getRequestId());
+                ParcelableGeofence mapItem = LocationServiceSingleton.getInstance(this).findGeofenceById(geofence.getRequestId());
 
                 if ( geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER )
                 {

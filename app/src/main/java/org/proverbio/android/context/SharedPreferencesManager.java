@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import com.google.gson.internal.Primitives;
 
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * @author Juan Pablo Proverbio <proverbio@nowcreatives.co>
@@ -52,7 +53,7 @@ public class SharedPreferencesManager
         {
             return Primitives.wrap(returnType).cast(getSharedPreferences(context).getLong(key, 0l));
         }
-        else if (LinkedHashSet.class.getSimpleName().equals(returnType.getSimpleName()))
+        else if (Set.class.getSimpleName().equals(returnType.getSimpleName()))
         {
             return Primitives.wrap(returnType).cast(getSharedPreferences(context).getStringSet(key, new LinkedHashSet<String>()));
         }

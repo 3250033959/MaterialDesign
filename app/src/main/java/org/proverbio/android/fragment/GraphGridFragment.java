@@ -36,10 +36,10 @@ public class GraphGridFragment extends BaseFragment implements AdapterView.OnIte
             //Sets the onItemClickListener
             gridView.setOnItemClickListener(this);
 
-            getFragmentLayout().addView(gridView);
+            getSwipeRefreshLayout().addView(gridView);
         }
 
-        return getFragmentLayout();
+        return getSwipeRefreshLayout();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class GraphGridFragment extends BaseFragment implements AdapterView.OnIte
         @Override
         public int getCount()
         {
-            return 50;
+            return 20;
         }
 
         @Override

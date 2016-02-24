@@ -15,15 +15,28 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import org.proverbio.android.fragment.base.BaseFragment;
+import org.proverbio.android.fragment.location.LocationPickerActivity;
 import org.proverbio.android.material.R;
 import org.proverbio.android.util.StringConstants;
 import org.proverbio.android.util.Validator;
 
+import java.util.Random;
+
 /**
  * @author Juan Pablo Proverbio
  */
-public class GeofenceComposeFragment extends BaseFragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener
+public class GeofenceComposeFragment extends BaseFragment implements View.OnClickListener,
+        SeekBar.OnSeekBarChangeListener,
+        OnMapReadyCallback
 
 {
     public static final String TAG = GeofenceComposeFragment.class.getSimpleName();
@@ -33,6 +46,8 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
     private TextView locationView;
     private TextView radiusLabelView;
     private AppCompatSeekBar radiusView;
+    private MapView mapView;
+    private GoogleMap googleMap;
 
     private ParcelableGeofence parcelableGeofence;
     private ParcelableGeofence selectedLocation;
@@ -63,15 +78,23 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
 
         if (content == null)
         {
+            getSwipeRefreshLayout().setEnabled(false);
             content = (ViewGroup)inflater.inflate(R.layout.fragment_geofence_compose, container, false);
             nameView = (EditText)content.findViewById(R.id.name);
+
             locationView = (TextView)content.findViewById(R.id.location);
             locationView.setOnClickListener(this);
+
+            mapView = (MapView)content.findViewById(R.id.map);
+            mapView.onCreate(savedInstanceState);
+            mapView.getMapAsync(this);
+            mapView.setVisibility(View.INVISIBLE);
+
             radiusLabelView = (TextView)content.findViewById(R.id.radiusLabel);
             radiusView = (AppCompatSeekBar)content.findViewById(R.id.radius);
             radiusView.setOnSeekBarChangeListener(this);
             radiusView.setProgress(100);
-            getFragmentLayout().addView(content);
+            getSwipeRefreshLayout().addView(content);
         }
 
         if (!TextUtils.isEmpty(parcelableGeofence.getName()))
@@ -86,7 +109,28 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
 
         radiusView.setProgress(parcelableGeofence.getRadius() >= 100 ? (int)parcelableGeofence.getRadius() : 100);
 
-        return getFragmentLayout();
+        return getSwipeRefreshLayout();
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap)
+    {
+        this.googleMap = googleMap;
+        this.googleMap.getUiSettings().setAllGesturesEnabled(false);
+        this.googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+
+        if (selectedLocation != null)
+        {
+            googleMap.clear();
+            addMarkerToMap(selectedLocation.getLatitude(), selectedLocation.getLongitude(), selectedLocation.getName(), selectedLocation.getAddress(), false);
+            mapView.setVisibility(View.VISIBLE);
+        }
+        else if (parcelableGeofence.isValid())
+        {
+            googleMap.clear();
+            addMarkerToMap(selectedLocation.getLatitude(), selectedLocation.getLongitude(), selectedLocation.getName(), selectedLocation.getAddress(), false);
+            mapView.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -114,10 +158,13 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
                         parcelableGeofence.setLongitude(selectedLocation.getLongitude());
                     }
 
-                    if (LocationService.getInstance(getContext()).saveGeofence(parcelableGeofence))
+                    if (TextUtils.isEmpty(parcelableGeofence.getId()))
                     {
-                        getContext().onBackPressed();
+                        parcelableGeofence.setId(String.valueOf(new Random().nextInt(10000)));
                     }
+
+                    LocationServiceSingleton.getInstance(getContext()).saveGeofence(parcelableGeofence);
+                    getContext().onBackPressed();
                 }
                 break;
         }
@@ -131,26 +178,45 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
         switch (v.getId())
         {
             case R.id.location:
-                Intent intent = new Intent( getContext(), LocationPickerActivity.class );
+                Intent intent = new Intent(getContext(), LocationPickerActivity.class);
 
-                if ( parcelableGeofence != null )
+                if (selectedLocation != null)
                 {
-                    intent.putExtra( StringConstants.ITEM_KEY, parcelableGeofence );
+                    intent.putExtra(StringConstants.ITEM_KEY, selectedLocation);
                 }
 
-                startActivityForResult( intent, LocationPickerActivity.REQUEST_CODE_PICK_LOCATION );
+                startActivityForResult(intent, LocationPickerActivity.REQUEST_CODE_PICK_LOCATION);
                 break;
         }
     }
 
+    private void addMarkerToMap( double latitude, double longitude, String title, String address, boolean noCameraMove )
+    {
+        LatLng position = new LatLng( latitude, longitude );
+        Marker marker = googleMap.addMarker( new MarkerOptions()
+                .position( position )
+                .title( title )
+                .snippet( address )
+                .draggable( true ) );
+        //TODO marker.setIcon( BitmapDescriptorFactory.fromResource(R.drawable.ic_pin_original) );
+        marker.showInfoWindow();
+
+        if ( !noCameraMove ) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 16));
+        }
+    }
+
     @Override
-    public void onActivityResult( int requestCode, int resultCode, Intent data )
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         if ( requestCode == LocationPickerActivity.REQUEST_CODE_PICK_LOCATION &&
-                resultCode == Activity.RESULT_OK  && data != null && data.hasExtra( StringConstants.ITEM_KEY ) )
+                resultCode == Activity.RESULT_OK  && data != null && data.hasExtra(StringConstants.ITEM_KEY))
         {
-            selectedLocation = data.getParcelableExtra( StringConstants.ITEM_KEY );
-            locationView.setText( selectedLocation.getAddress() );
+            selectedLocation = data.getParcelableExtra(StringConstants.ITEM_KEY);
+            locationView.setText(selectedLocation.getAddress());
+            googleMap.clear();
+            addMarkerToMap(selectedLocation.getLatitude(), selectedLocation.getLongitude(), selectedLocation.getName(), selectedLocation.getAddress(), false);
+            mapView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -172,4 +238,48 @@ public class GeofenceComposeFragment extends BaseFragment implements View.OnClic
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {}
+
+    @Override
+    public void onResume()
+    {
+        if ( mapView != null )
+        {
+            mapView.onResume();
+        }
+
+        super.onResume();
+    }
+
+    @Override
+    public void onPause()
+    {
+        if ( mapView != null )
+        {
+            mapView.onPause();
+        }
+
+        super.onPause();
+    }
+
+    @Override
+    public void onLowMemory()
+    {
+        if ( mapView != null )
+        {
+            mapView.onLowMemory();
+        }
+
+        super.onLowMemory();
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        if ( mapView != null )
+        {
+            mapView.onDestroy();
+        }
+
+        super.onDestroy();
+    }
 }

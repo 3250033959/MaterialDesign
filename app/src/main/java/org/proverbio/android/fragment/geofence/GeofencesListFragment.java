@@ -29,7 +29,7 @@ public class GeofencesListFragment extends BaseFragment implements View.OnClickL
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        this.geofenceRecyclerAdapter = new GeofencesListAdapter(getContext(), LocationService.getInstance(getContext()).getGeofencesList());
+        this.geofenceRecyclerAdapter = new GeofencesListAdapter(getContext(), LocationServiceSingleton.getInstance(getContext()).getGeofencesList());
         getContext().getFloatingActionButton().setOnClickListener(this);
     }
 
@@ -45,10 +45,10 @@ public class GeofencesListFragment extends BaseFragment implements View.OnClickL
             geofencesRecyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
             geofencesRecyclerView.setItemAnimator(new DefaultItemAnimator());
             geofencesRecyclerView.setAdapter(geofenceRecyclerAdapter);
-            getFragmentLayout().addView(geofencesRecyclerView);
+            getSwipeRefreshLayout().addView(geofencesRecyclerView);
         }
 
-        return getFragmentLayout();
+        return getSwipeRefreshLayout();
     }
 
     @Override
@@ -71,5 +71,12 @@ public class GeofencesListFragment extends BaseFragment implements View.OnClickL
                 transaction.commit();
                 break;
         }
+    }
+
+    @Override
+    public void onRefresh()
+    {
+        geofenceRecyclerAdapter.setGeofencesList(LocationServiceSingleton.getInstance(getContext()).getGeofencesList());
+        getSwipeRefreshLayout().setRefreshing(false);
     }
 }

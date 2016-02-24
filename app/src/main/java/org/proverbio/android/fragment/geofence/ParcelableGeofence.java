@@ -51,6 +51,11 @@ public class ParcelableGeofence implements Parcelable
         this.radius = in.readFloat();
     }
 
+    public boolean isValid()
+    {
+        return  latitude != 0d && longitude != 0d && !TextUtils.isEmpty(id);
+    }
+
     public String getId()
     {
         if (TextUtils.isEmpty(id))

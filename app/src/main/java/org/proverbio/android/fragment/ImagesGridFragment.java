@@ -38,10 +38,10 @@ public class ImagesGridFragment extends BaseFragment implements CardAdapter.Recy
             GridLayoutManager layoutManager = new GridLayoutManager(getContext(), Utils.getMaxColumnsForScreen(getContext(), 300));
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(cardAdapter);
-            getFragmentLayout().addView(recyclerView);
+            getSwipeRefreshLayout().addView(recyclerView);
         }
 
-        return getFragmentLayout();
+        return getSwipeRefreshLayout();
     }
 
     @Override
