@@ -19,5 +19,9 @@ Contains a Geo-fencing Implemention
 * GeofenceListFragment
 * GeofenceComposeFragment
 * LocationPickerActivity
+* 
+
+![Image Card Grid](https://github.com/proverbface/MaterialDesign/blob/master/Image%20Cards.png)
+![Geo-fences](https://github.com/proverbface/MaterialDesign/blob/master/Geo-fences.png)
 
 
