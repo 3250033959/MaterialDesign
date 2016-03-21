@@ -1,6 +1,7 @@
 package org.proverbio.android.fragment.geofence;
 
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
@@ -132,14 +133,14 @@ public class GeofenceMapFragment extends BaseFragment implements
     {
         this.googleMap = googleMap;
         this.googleMap.getUiSettings().setZoomControlsEnabled(false);
-        this.googleMap.getUiSettings().setMyLocationButtonEnabled(false);
         this.googleMap.getUiSettings().setMapToolbarEnabled(false);
         this.googleMap.setOnMapLongClickListener(this);
         this.googleMap.setOnInfoWindowClickListener(this);
 
         renderGeofencesOnMap();
 
-        if (!LocationPermissionManager.isLocationPermissionGranted(getContext()))
+        if (Build.VERSION.SDK_INT  > Build.VERSION_CODES.LOLLIPOP &&
+            !LocationPermissionManager.isLocationPermissionGranted(getContext()))
         {
             //Let's give some time to the view to load. It gives a better feel to the user.
             new Handler().postDelayed(new Runnable() {
@@ -155,7 +156,8 @@ public class GeofenceMapFragment extends BaseFragment implements
         }
         else
         {
-            this.googleMap.setLocationSource(new LocationSourceImpl(getContext()));
+            LocationSourceImpl locationSource = new LocationSourceImpl(getContext());
+            this.googleMap.setLocationSource(locationSource);
             this.googleMap.setMyLocationEnabled(true);
         }
     }
