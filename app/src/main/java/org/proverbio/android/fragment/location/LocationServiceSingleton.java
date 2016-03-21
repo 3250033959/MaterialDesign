@@ -54,10 +54,10 @@ public class LocationServiceSingleton extends Observable implements GoogleApiCli
     private static volatile LocationServiceSingleton instance;
 
     //The app Context
-    private Context context;
+    private final Context context;
 
     //Our Google API Client
-    private GoogleApiClient googleApiClient;
+    private final GoogleApiClient googleApiClient;
 
     //It's not final to be initialized lazily getGeofencesList();
     private List<ParcelableGeofence> geofencesList;
@@ -99,11 +99,17 @@ public class LocationServiceSingleton extends Observable implements GoogleApiCli
         this.geocoder = new Geocoder(context, Locale.getDefault());
     }
 
-    public static synchronized LocationServiceSingleton getInstance(Context context)
+    public static LocationServiceSingleton getInstance(Context context)
     {
         if (instance == null)
         {
-            instance = new LocationServiceSingleton(context);
+            synchronized (LocationServiceSingleton.class)
+            {
+                if (instance == null)
+                {
+                    instance = new LocationServiceSingleton(context);
+                }
+            }
         }
 
         return instance;

@@ -1,6 +1,7 @@
 package org.proverbio.android.fragment.geofence;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
@@ -17,7 +18,7 @@ import java.util.List;
  *  Handles reboot and if there were geo-fences then it will re-add them to the devices as they
  *  don't survive the device reboot
  */
-public class GeofenceRebootReceiver extends WakefulBroadcastReceiver
+public class GeofenceRebootReceiver extends BroadcastReceiver
 {
     @Override
     public void onReceive(final Context context, Intent intent)

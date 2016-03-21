@@ -28,7 +28,7 @@ public class LocationPermissionManager
      */
     public static void checkSelfLocationPermission( Activity activity, final Fragment fragment, final int requestCode )
     {
-        if ( ContextCompat.checkSelfPermission(fragment.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+        if ( ContextCompat.checkSelfPermission( fragment.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ContextCompat.checkSelfPermission( fragment.getContext(), Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED )
         {
             //Do I need to show explanation dialog

@@ -135,10 +135,10 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
     {
         super.showBackButton();
 
-        if ( actionBarDrawerToggle != null && drawerLayout != null )
+        if (actionBarDrawerToggle != null && drawerLayout != null)
         {
-            actionBarDrawerToggle.setDrawerIndicatorEnabled( false );
-            drawerLayout.setDrawerLockMode( DrawerLayout.LOCK_MODE_LOCKED_CLOSED );
+            actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
     }
 
@@ -147,11 +147,11 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
     {
         super.showDrawerButton();
 
-        if ( actionBarDrawerToggle != null && drawerLayout != null )
+        if (actionBarDrawerToggle != null && drawerLayout != null)
         {
-            actionBarDrawerToggle.setDrawerIndicatorEnabled( true );
+            actionBarDrawerToggle.setDrawerIndicatorEnabled(true);
             actionBarDrawerToggle.syncState();
-            drawerLayout.setDrawerLockMode( DrawerLayout.LOCK_MODE_UNLOCKED );
+            drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }
     }
 
@@ -182,15 +182,6 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
 
         switch (menuItem.getItemId())
         {
-            case R.id.geofences:
-                fragment = getSupportFragmentManager().findFragmentByTag(GeofenceMapFragment.TAG);
-                fragmentTag = GeofenceMapFragment.TAG;
-                if (fragment == null)
-                {
-                    fragment = new GeofenceMapFragment();
-                }
-                break;
-
             case R.id.image_grid:
                 fragment = getSupportFragmentManager().findFragmentByTag(ImagesGridFragment.TAG);
                 fragmentTag = ImagesGridFragment.TAG;
@@ -206,6 +197,15 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
                 if (fragment == null)
                 {
                     fragment = new GraphGridFragment();
+                }
+                break;
+
+            case R.id.geofences:
+                fragment = getSupportFragmentManager().findFragmentByTag(GeofenceMapFragment.TAG);
+                fragmentTag = GeofenceMapFragment.TAG;
+                if (fragment == null)
+                {
+                    fragment = new GeofenceMapFragment();
                 }
                 break;
         }
