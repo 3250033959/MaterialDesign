@@ -4,12 +4,12 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="Manifest.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <permission
-        android:name="org.proverbio.android.INTERNAL"
+        android:name="org.proverbio.android.material.INTERNAL"
         android:protectionLevel="signature"/>
 
     <application
@@ -32,30 +32,10 @@
 
         <activity
             android:name="org.proverbio.android.activity.ImageViewerActivity"
-            android:permission="org.proverbio.android.INTERNAL"
+            android:permission="org.proverbio.android.material.INTERNAL"
             android:configChanges="orientation|screenSize"
             android:theme="@style/AppTheme">
         </activity>
-
-        <activity
-            android:name="org.proverbio.android.fragment.location.LocationPickerActivity"
-            android:permission="org.proverbio.android.INTERNAL"
-            android:configChanges="orientation|screenSize"
-            android:theme="@style/AppTheme">
-        </activity>
-
-        <receiver android:name="org.proverbio.android.fragment.geofence.GeofenceRebootReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-            </intent-filter>
-        </receiver>
-
-        <receiver android:name="org.proverbio.android.fragment.geofence.GeofenceTransitionsReceiver"
-            android:permission="org.proverbio.android.INTERNAL">
-            <intent-filter>
-                <action android:name="android.intent.action.GEO_FENCE_TRANSITION"/>
-            </intent-filter>
-        </receiver>
 
         <meta-data
             android:name="com.google.android.gms.version"

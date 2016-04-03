@@ -7,16 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
 import org.proverbio.android.context.SharedPreferencesManager;
-import org.proverbio.android.fragment.GraphGridFragment;
 import org.proverbio.android.fragment.ImagesGridFragment;
-import org.proverbio.android.fragment.geofence.GeofenceMapFragment;
 import org.proverbio.android.material.R;
 
 /**
@@ -108,14 +105,16 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
 
         if (!isNavigationDrawerLearnt)
             this.drawerLayout.openDrawer(Gravity.LEFT);
-            this.drawerLayout.post(new Runnable() {
+            this.drawerLayout.post(new Runnable()
+            {
                 @Override
-                public void run() {
+                public void run()
+                {
                     actionBarDrawerToggle.syncState();
                 }
             });
 
-        this.drawerLayout.setDrawerListener(actionBarDrawerToggle);
+        this.drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
         //Inflating {@see FloatingActionButton}
         floatingActionButton = (FloatingActionButton)findViewById(R.id.floatingActionButton);
@@ -188,24 +187,6 @@ public class AppMainActivity extends BaseActivity implements View.OnClickListene
                 if (fragment == null)
                 {
                     fragment = new ImagesGridFragment();
-                }
-                break;
-
-            case R.id.graphs_grid:
-                fragment = getSupportFragmentManager().findFragmentByTag(GraphGridFragment.TAG);
-                fragmentTag = GraphGridFragment.TAG;
-                if (fragment == null)
-                {
-                    fragment = new GraphGridFragment();
-                }
-                break;
-
-            case R.id.geofences:
-                fragment = getSupportFragmentManager().findFragmentByTag(GeofenceMapFragment.TAG);
-                fragmentTag = GeofenceMapFragment.TAG;
-                if (fragment == null)
-                {
-                    fragment = new GeofenceMapFragment();
                 }
                 break;
         }
